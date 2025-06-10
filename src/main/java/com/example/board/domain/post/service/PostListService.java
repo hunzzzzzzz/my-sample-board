@@ -24,13 +24,13 @@ public class PostListService {
 		return (page - 1) * POST_PAGE_SIZE;
 	}
 
-	private List<PostResponse> getPosts(int page, int offset) {
-		return postMapper.getAll(POST_PAGE_SIZE, offset);
+	private List<PostResponse> getPosts(int page, int offset, String keyword) {
+		return postMapper.getAll(POST_PAGE_SIZE, offset, keyword);
 	}
 
 	private void convertToRelativeTime(List<PostResponse> posts) {
 		for (PostResponse post : posts)
-			post.setFormattedCreatedAt(timeFormatter.format(post.getCreatedAt()));
+			post.setFormattedCreatedAt(timeFormatter.formatTime(post.getCreatedAt()));
 	}
 
 	private int calculateTotalPages() {
@@ -40,12 +40,12 @@ public class PostListService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<PostResponse> getAll(int page) {
+	public List<PostResponse> getAll(int page, String keyword) {
 		// offset 계산
 		int offset = getOffset(page);
 
 		// 게시글 목록 조회
-		List<PostResponse> posts = getPosts(page, offset);
+		List<PostResponse> posts = getPosts(page, offset, keyword);
 
 		// 상대 시간으로 변환
 		convertToRelativeTime(posts);
@@ -58,4 +58,5 @@ public class PostListService {
 	public int getTotalPages() {
 		return calculateTotalPages();
 	}
+
 }

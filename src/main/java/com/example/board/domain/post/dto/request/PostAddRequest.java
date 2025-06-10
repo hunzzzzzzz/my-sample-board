@@ -2,7 +2,21 @@ package com.example.board.domain.post.dto.request;
 
 import com.example.board.domain.post.entity.Post;
 
-public record PostAddRequest(String title, String content, String author) {
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Builder
+@Getter
+@Setter
+public class PostAddRequest {
+	@Size(max = 255, message = "제목은 255자를 초과할 수 없습니다.")
+	String title;
+
+	String content;
+
+	String author;
 
 	public Post toEntity() {
 		return new Post(title, content, author);

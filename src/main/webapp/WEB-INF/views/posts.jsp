@@ -39,6 +39,17 @@
             font-weight: 600;
         }
 
+        /* 게시글 목록 제목 링크 스타일 추가 */
+        h1 a {
+            text-decoration: none; /* 링크 기본 밑줄 제거 */
+            color: inherit; /* 부모 요소(h1)의 색상 상속 */
+            cursor: pointer;
+        }
+        h1 a:hover {
+            color: #007bff; /* 호버 시 색상 변경 (선택 사항) */
+        }
+
+
         /* 테이블 스타일 */
         table {
             width: 100%;
@@ -70,6 +81,18 @@
             background-color: #f1f3f5;
             cursor: pointer;
         }
+
+        /* 게시글 제목 링크 스타일 */
+        td a {
+            color: inherit; /* 부모 요소(td)의 색상 상속 (일반 텍스트 색상) */
+            text-decoration: underline; /* 밑줄 유지 */
+            cursor: pointer;
+        }
+        td a:hover {
+            color: #007bff; /* 호버 시 파란색으로 변경 (선택 사항) */
+            text-decoration: underline; /* 호버 시 밑줄 유지 */
+        }
+
 
         /* 페이징 스타일 */
         .pagination {
@@ -184,7 +207,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>게시글 목록</h1>
+        <h1>
+            <a href="/posts">게시글 목록</a> <%-- h1 태그를 링크로 감싸서 클릭 시 새로고침 --%>
+        </h1>
 
         <c:if test="${not empty message}">
             <div class="message-success">
@@ -198,7 +223,7 @@
         </c:if>
 
         <div class="search-container">
-            <input type="text" id="searchKeyword" name="searchKeyword" class="search-input" placeholder="제목 검색..."
+            <input type="text" id="searchKeyword" name="searchKeyword" class="search-input" placeholder="검색..."
                    value="${param.keyword != null ? param.keyword : ''}"> <%-- 현재 검색어 유지 --%>
             <button type="button" class="search-button" onclick="searchPosts()">검색</button>
         </div>
@@ -217,13 +242,13 @@
                 <c:forEach var="post" items="${posts}">
                     <tr>
                         <td>${post.postId}</td>
-                        <td>${post.title}</td>
+                        <%-- 게시글 제목에 상세 페이지 링크 추가 --%>
+                        <td><a href="/posts/${post.postId}">${post.title}</a></td>
                         <td>${post.author}</td>
                         <td>${post.viewCount}</td>
                         <td>${post.formattedCreatedAt}</td>
                     </tr>
                 </c:forEach>
-                <%-- 게시글이 없는 경우 메시지 표시 --%>
                 <c:if test="${empty posts}">
                     <tr>
                         <td colspan="5" style="text-align: center; padding: 20px; color: #777;">게시글이 없습니다.</td>

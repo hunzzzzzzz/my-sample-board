@@ -2,12 +2,13 @@ package com.example.board.global.component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class TimeFormatter {
-	public String format(LocalDateTime time) {
+	public String formatTime(LocalDateTime time) {
 		LocalDateTime now = LocalDateTime.now();
 		Duration differenceOfDays = Duration.between(time, now);
 
@@ -22,5 +23,11 @@ public class TimeFormatter {
 
 		else
 			return "방금";
+	}
+
+	public String formatTimeIntoYyyyMmDd(LocalDateTime time) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 dd일 HH:mm");
+
+		return time.format(formatter);
 	}
 }

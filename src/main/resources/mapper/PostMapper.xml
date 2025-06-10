@@ -12,19 +12,36 @@
 		<result property="createdAt" column="created_at" />
 	</resultMap>
 
+	<resultMap id="postDetailResponse"
+		type="com.example.board.domain.post.dto.response.PostDetailResponse">
+		<id property="postId" column="id" />
+		<result property="status" column="status" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="author" column="author" />
+		<result property="viewCount" column="view_count" />
+		<result property="createdAt" column="created_at" />
+		<result property="isUpdated" column="is_updated" />
+	</resultMap>
+
 	<select id="getAll" resultMap="postResponse">
 		SELECT * FROM (
-		SELECT a.*, ROWNUM rnum
-		FROM (
-		SELECT id, status, title, author, view_count, created_at
-		FROM t_board_post
-		ORDER BY id DESC
-		) a
-		WHERE ROWNUM &lt;= #{offset} + #{pageSize}
-		)
+			SELECT a.*, ROWNUM rnum
+				FROM (
+					SELECT id, status, title, author, view_count, created_at
+					FROM t_board_post
+					<where>
+						<if test="keyword != null and keyword != ''">
+							title LIKE '%' || #{keyword} || '%' OR content LIKE '%' || #{keyword} || '%'
+						</if>
+					</where>
+					ORDER BY id DESC
+				) a
+			WHERE ROWNUM &lt;= #{offset} + #{pageSize}
+			)
 		WHERE rnum &gt; #{offset}
 	</select>
-	
+
 	<select id="countAllPosts">
 		SELECT COUNT(*) FROM t_board_post
 	</select>
@@ -33,4 +50,22 @@
 		INSERT INTO t_board_post(title, content, author)
 		VALUES(#{title}, #{content}, #{author})
 	</insert>
+
+	<select id="get" resultMap="postDetailResponse">
+		SELECT id, status, title, content, author, view_count, created_at,
+		CASE
+		WHEN created_at != updated_at THEN 1
+		ELSE 0
+		END AS is_updated
+		FROM t_board_post
+		WHERE id=#{postId}
+	</select>
+	
+	<update id="delete">
+		UPDATE t_board_post
+		SET 
+			title=#{deletedTitle}
+			status='DELETED'
+		WHERE id=#{postId} 
+	</update>
 </mapper>
