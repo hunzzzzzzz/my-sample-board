@@ -66,6 +66,9 @@
 	</select>
 
 	<insert id="add">
+		<selectKey keyProperty="postId" resultType="long" order="AFTER">
+			SELECT seq_t_board_post.CURRVAL FROM DUAL
+		</selectKey>
 		INSERT INTO t_board_post(title, content, author)
 		VALUES(#{title}, #{content}, #{author})
 	</insert>

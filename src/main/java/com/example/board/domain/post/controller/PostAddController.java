@@ -37,7 +37,6 @@ public class PostAddController {
 	ResponseEntity<?> add(@Valid @ModelAttribute PostAddRequest request, BindingResult bindingResult) {
 		// 입력값에 오류가 발생한 경우
 		if (bindingResult.hasErrors()) {
-			System.out.println("들어오는지 확인");
 			ErrorResponse errorResponse = ErrorResponse.of(VALIDATION_FAILED_MESSAGE, bindingResult);
 
 			return ResponseEntity.badRequest().body(errorResponse);

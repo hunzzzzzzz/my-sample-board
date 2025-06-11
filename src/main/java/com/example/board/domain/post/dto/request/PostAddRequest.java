@@ -1,5 +1,9 @@
 package com.example.board.domain.post.dto.request;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.board.domain.post.entity.Post;
 
 import jakarta.validation.constraints.Size;
@@ -22,4 +26,6 @@ public class PostAddRequest {
 	public Post toEntity() {
 		return new Post(title, content, author);
 	}
+
+	private List<MultipartFile> files;
 }

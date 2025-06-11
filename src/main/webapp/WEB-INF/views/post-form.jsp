@@ -20,12 +20,11 @@
 		<div id="serverMessage" class="message" style="display: none;"></div>
 
 		<form id="postForm"
-			action="<c:if test="${isEditMode}">/posts/${request.postId}</c:if><c:if test="${not isEditMode}">/posts</c:if>"
-			method="post"
-            enctype="multipart/form-data">
+			action="<c:if test="${isEditMode}">/posts/${postId}</c:if><c:if test="${not isEditMode}">/posts</c:if>"
+			method="post" enctype="multipart/form-data">
 
 			<c:if test="${isEditMode}">
-				<input type="hidden" name="postId" value="${request.postId}">
+				<input type="hidden" name="postId" value="${postId}">
 			</c:if>
 
 			<div>
@@ -45,9 +44,9 @@
 				<div id="contentError" class="error-message" style="display: none;"></div>
 			</div>
 
-			<div>
-				<label for="attachments">첨부파일:</label> <input type="file"
-					id="attachments" name="attachments" multiple>
+			<div class="form-group">
+				<label for="file">첨부 파일:</label> <input type="file" id="file"
+					name="multipartFile" class="form-control" multiple>
 			</div>
 
 			<div class="button-group">

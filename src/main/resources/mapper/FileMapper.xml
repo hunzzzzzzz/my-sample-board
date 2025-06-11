@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.board.domain.file.mapper.FileMapper">
+	
+	<insert id="save">
+		INSERT INTO t_board_file(id, post_id, original_file_name, saved_file_name, file_path)
+		VALUES(#{fileId}, #{postId}, #{originalFileName}, #{savedFileName}, #{path})
+	</insert>
+
+</mapper>
