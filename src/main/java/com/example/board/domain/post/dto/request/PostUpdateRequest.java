@@ -10,13 +10,12 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class PostAddRequest {
+public class PostUpdateRequest {
 	@Size(max = 255, message = "제목은 255자를 초과할 수 없습니다.")
 	String title;
 
 	String content;
 
-	@Size(max = 10, message = "작성자 이름은 10자를 초과할 수 없습니다.")
 	String author;
 
 	public Post toEntity() {

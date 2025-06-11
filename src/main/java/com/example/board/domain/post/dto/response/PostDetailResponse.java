@@ -18,5 +18,7 @@ public class PostDetailResponse {
 	private int viewCount;
 	private LocalDateTime createdAt;
 	private String formattedCreatedAt;
+	private LocalDateTime updatedAt;
+	private String formattedUpdatedAt;
 	private Boolean isUpdated;
 }

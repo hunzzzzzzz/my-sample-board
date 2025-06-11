@@ -21,6 +21,7 @@
 		<result property="author" column="author" />
 		<result property="viewCount" column="view_count" />
 		<result property="createdAt" column="created_at" />
+		<result property="updatedAt" column="updated_at"/>
 		<result property="isUpdated" column="is_updated" />
 	</resultMap>
 
@@ -52,7 +53,7 @@
 	</insert>
 
 	<select id="get" resultMap="postDetailResponse">
-		SELECT id, status, title, content, author, view_count, created_at,
+		SELECT id, status, title, content, author, view_count, created_at, updated_at,
 		CASE
 		WHEN created_at != updated_at THEN 1
 		ELSE 0
@@ -61,10 +62,19 @@
 		WHERE id=#{postId}
 	</select>
 	
+	<update id="update">
+		UPDATE t_board_post
+		SET
+			title=#{request.title},
+			content=#{request.content},
+			author=#{request.author}
+		WHERE id=#{postId}
+	</update>
+	
 	<update id="delete">
 		UPDATE t_board_post
 		SET 
-			title=#{deletedTitle}
+			title=#{deletedTitle},
 			status='DELETED'
 		WHERE id=#{postId} 
 	</update>
