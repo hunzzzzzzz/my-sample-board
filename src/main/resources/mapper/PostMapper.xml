@@ -12,8 +12,14 @@
 		<result property="createdAt" column="created_at" />
 	</resultMap>
 
-	<resultMap id="postDetailResponse"
-		type="com.example.board.domain.post.dto.response.PostDetailResponse">
+	<resultMap id="fileResponseMap" type="com.example.board.domain.file.dto.response.FileResponse">
+	    <id property="fileId" column="file_id" />
+		<result property="originalFileName" column="original_file_name"/>
+		<result property="fileSize" column="file_size"/>
+		<result property="fileType" column="file_type"/>
+	</resultMap>
+
+	<resultMap id="postDetailResponse" type="com.example.board.domain.post.dto.response.PostDetailResponse">
 		<id property="postId" column="id" />
 		<result property="status" column="status" />
 		<result property="title" column="title" />
@@ -22,7 +28,8 @@
 		<result property="viewCount" column="view_count" />
 		<result property="createdAt" column="created_at" />
 		<result property="updatedAt" column="updated_at"/>
-		<result property="isUpdated" column="is_updated" />
+		<result property="isUpdated" column="is_updated" /> 
+		<collection property="files" javaType="java.util.ArrayList" resultMap="fileResponseMap" />
 	</resultMap>
 
 	<select id="getAll" resultMap="postResponse">
@@ -74,13 +81,29 @@
 	</insert>
 
 	<select id="get" resultMap="postDetailResponse">
-		SELECT id, status, title, content, author, view_count, created_at, updated_at,
-		CASE
-		WHEN created_at != updated_at THEN 1
-		ELSE 0
-		END AS is_updated
-		FROM t_board_post
-		WHERE id=#{postId}
+		SELECT 
+			p.id, 
+			p.status, 
+			p.title, 
+			p.content, 
+			p.author, 
+			p.view_count, 
+			p.created_at, 
+			p.updated_at,
+			CASE 
+				WHEN p.created_at != p.updated_at THEN 1
+				ELSE 0
+			END AS is_updated,
+			f.id AS file_id,
+			f.original_file_name,
+			f.file_size,
+			f.file_type
+		FROM 
+			t_board_post p
+		LEFT JOIN
+			t_board_file f ON p.id = f.post_id
+		WHERE 
+			p.id=#{postId}
 	</select>
 	
 	<update id="update">

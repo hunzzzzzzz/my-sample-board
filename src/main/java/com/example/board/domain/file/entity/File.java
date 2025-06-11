@@ -13,13 +13,18 @@ public class File {
 	private String originalFileName;
 	private String savedFileName;
 	private String path;
+	private long fileSize;
+	private String fileType;
 
-	public File(UUID fileId, long postId, String originalFileName, String savedFileName, String path) {
+	public File(UUID fileId, long postId, String originalFileName, String savedFileName, String path, long fileSize,
+			String fileType) {
 		this.fileId = fileId;
 		this.postId = postId;
 		this.originalFileName = originalFileName;
 		this.savedFileName = savedFileName;
 		this.path = path;
+		this.fileSize = fileSize;
+		this.fileType = fileType;
 	}
 
 }

@@ -55,7 +55,8 @@ public class FileSaveService {
 	}
 
 	private void saveFileInDb(long postId, MultipartFile multipartFile, String savedFileName) {
-		File file = new File(createRandomUUID(), postId, multipartFile.getOriginalFilename(), savedFileName, uploadDir);
+		File file = new File(createRandomUUID(), postId, multipartFile.getOriginalFilename(), savedFileName, uploadDir,
+				multipartFile.getSize(), multipartFile.getContentType());
 		fileMapper.save(file);
 	}
 

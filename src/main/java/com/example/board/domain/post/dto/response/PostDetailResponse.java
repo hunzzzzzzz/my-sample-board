@@ -1,7 +1,9 @@
 package com.example.board.domain.post.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import com.example.board.domain.file.dto.response.FileResponse;
 import com.example.board.domain.post.entity.PostStatus;
 
 import lombok.Getter;
@@ -21,4 +23,5 @@ public class PostDetailResponse {
 	private LocalDateTime updatedAt;
 	private String formattedUpdatedAt;
 	private Boolean isUpdated;
+	private List<FileResponse> files;
 }

@@ -4,8 +4,10 @@
 <mapper namespace="com.example.board.domain.file.mapper.FileMapper">
 	
 	<insert id="save">
-		INSERT INTO t_board_file(id, post_id, original_file_name, saved_file_name, file_path)
-		VALUES(#{fileId}, #{postId}, #{originalFileName}, #{savedFileName}, #{path})
+		INSERT INTO t_board_file(id, post_id, original_file_name, saved_file_name, file_path, file_size, file_type)
+		VALUES(#{fileId}, #{postId}, #{originalFileName}, #{savedFileName}, #{path}, #{fileSize}, #{fileType})
 	</insert>
+	
+	
 
 </mapper>
