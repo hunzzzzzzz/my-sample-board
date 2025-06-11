@@ -18,6 +18,7 @@ import com.example.board.domain.post.dto.request.PostAddRequest;
 import com.example.board.domain.post.dto.request.PostUpdateRequest;
 import com.example.board.domain.post.dto.response.PostDetailResponse;
 import com.example.board.domain.post.dto.response.PostResponse;
+import com.example.board.domain.post.entity.SortCondition;
 import com.example.board.domain.post.service.PostAddService;
 import com.example.board.domain.post.service.PostDeleteService;
 import com.example.board.domain.post.service.PostGetService;
@@ -44,8 +45,8 @@ public class PostRestController {
 
 	@GetMapping
 	ResponseEntity<List<PostResponse>> getAll(@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false) String keyword) {
-		List<PostResponse> posts = postListService.getAll(page, keyword);
+			@RequestParam(required = false) String keyword, @RequestParam(required = false) String sort) {
+		List<PostResponse> posts = postListService.getAll(page, keyword, SortCondition.valueOf(sort));
 
 		return ResponseEntity.ok(posts);
 	}

@@ -1,0 +1,314 @@
+/* posts.css */
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f0f2f5;
+	color: #333;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-height: 100vh;
+}
+
+.page-title {
+	text-align: center;
+	color: #2c3e50;
+	margin-top: 50px;
+	margin-bottom: 20px;
+	font-size: 2.8em;
+	font-weight: 700;
+}
+
+.page-title .logo-link {
+	color: inherit;
+	text-decoration: none;
+}
+
+.page-title .logo-link:hover {
+	color: #007bff;
+}
+
+.container {
+	width: 90%;
+	max-width: 1000px; /* 게시판 전체 최대 너비 */
+	background-color: #ffffff;
+	padding: 30px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	border-radius: 10px;
+	box-sizing: border-box;
+	position: relative;
+	min-height: 500px;
+	padding-top: 80px;
+	padding-bottom: 80px;
+	border-top: 2px solid #e0e0e0;
+}
+
+.search-container {
+	display: flex;
+	gap: 8px;
+	width: 300px;
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	z-index: 10;
+}
+
+.search-input {
+	flex-grow: 1;
+	padding: 8px 12px;
+	border: 1px solid #ced4da;
+	border-radius: 5px;
+	font-size: 0.95em;
+}
+
+.search-button {
+	padding: 8px 15px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 0.95em;
+	font-weight: 600;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+	min-width: 60px;
+	white-space: nowrap;
+}
+
+.search-button:hover {
+	background-color: #0056b3;
+	transform: translateY(-1px);
+}
+
+.sort-container {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	color: #495057;
+	font-size: 0.95em;
+	position: absolute;
+	bottom: 30px;
+	left: 30px;
+	z-index: 10;
+}
+
+.sort-container label {
+	font-weight: 500;
+}
+
+.sort-container select {
+	padding: 8px 12px;
+	border: 1px solid #ced4da;
+	border-radius: 5px;
+	font-size: 0.9em;
+	background-color: #ffffff;
+	cursor: pointer;
+	outline: none;
+	appearance: none;
+	background-image:
+		url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 8px center;
+	background-size: 16px;
+	min-width: 100px;
+}
+
+.sort-container select:hover {
+	border-color: #007bff;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 25px;
+	background-color: #ffffff;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	box-sizing: border-box;
+	table-layout: fixed;
+}
+
+/* colgroup을 통해 각 컬럼의 초기 너비 설정 */
+table colgroup col:nth-child(1) {
+	width: 50px;
+} /* ID */
+table colgroup col:nth-child(2) {
+	width: 25%;
+} /* 제목 */
+table colgroup col:nth-child(3) {
+	width: 100px;
+} /* 작성자 */
+table colgroup col:nth-child(4) {
+	width: 110px;
+} /* 조회수 */
+table colgroup col:nth-child(5) {
+	width: 120px;
+} /* 작성일 */
+table thead tr {
+	background-color: #f8f9fa;
+	border-bottom: 1px solid #dee2e6;
+}
+
+table th, table td {
+	padding: 10px; /* 패딩을 약간 줄여서 텍스트 공간 확보 */
+	text-align: left;
+	border-bottom: 1px solid #dee2e6;
+	vertical-align: middle;
+}
+
+/* 조회수 헤더 (<th>)에 직접 스타일 적용 */
+table thead th:nth-child(4) {
+	white-space: nowrap; /* 줄바꿈 방지 */
+	min-width: 80px; /* 최소 너비 보장 */
+	text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+/* 조회수 데이터 셀 (<td>)에 직접 스타일 적용 */
+table tbody td:nth-child(4) {
+	white-space: nowrap; /* 줄바꿈 방지 */
+	min-width: 80px; /* 최소 너비 보장 */
+	overflow: hidden; /* 넘치는 내용 숨기기 */
+	text-overflow: ellipsis; /* ... 표시 (조회수는 거의 필요 없겠지만 혹시 몰라 추가) */
+	text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+table th {
+	color: #495057;
+	font-weight: 600;
+	font-size: 1.05em;
+}
+
+/* 게시글 제목 컬럼 (두 번째 td)의 텍스트 오버플로우 처리 */
+table tbody td:nth-child(2) {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.post-title-link, .deleted-post-title {
+	color: inherit;
+	text-decoration: none;
+	padding: 0;
+	margin: 0;
+}
+
+.post-title-link:hover {
+	color: #007bff;
+	text-decoration: underline;
+}
+
+table tbody tr:hover {
+	background-color: #e9ecef;
+}
+
+table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.deleted-post-title {
+	color: #888;
+	font-style: italic;
+	text-decoration: line-through;
+}
+
+.no-posts {
+	text-align: center;
+	color: #6c757d;
+	padding: 20px;
+}
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	bottom: 30px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+	margin-top: 0;
+}
+
+.pagination a {
+	display: inline-block;
+	padding: 10px 15px;
+	margin: 0 5px;
+	border: 1px solid #007bff;
+	border-radius: 5px;
+	text-decoration: none;
+	color: #007bff;
+	background-color: #ffffff;
+	transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+	background-color: #e7f3ff;
+}
+
+.pagination a.active {
+	background-color: #007bff;
+	color: white;
+	font-weight: bold;
+	border-color: #007bff;
+}
+
+.pagination a.active:hover {
+	background-color: #0056b3;
+	border-color: #0056b3;
+}
+
+.button-container {
+	text-align: right;
+	position: absolute;
+	bottom: 25px;
+	right: 30px;
+	z-index: 10;
+	margin-top: 0;
+}
+
+.register-button {
+	display: inline-block;
+	padding: 12px 25px;
+	background-color: #28a745;
+	color: white;
+	text-decoration: none;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1em;
+	font-weight: 600;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.register-button:hover {
+	background-color: #218838;
+	transform: translateY(-1px);
+}
+
+.message-success {
+	color: #155724;
+	background-color: #d4edda;
+	border: 1px solid #c3e6cb;
+	padding: 12px 20px;
+	margin-bottom: 25px;
+	border-radius: 6px;
+	text-align: center;
+	font-weight: 500;
+	font-size: 0.95em;
+}
+
+.message-error {
+	color: #721c24;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	padding: 12px 20px;
+	margin-bottom: 25px;
+	border-radius: 6px;
+	text-align: center;
+	font-weight: 500;
+	font-size: 0.95em;
+}

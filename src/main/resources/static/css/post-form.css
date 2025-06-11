@@ -1,0 +1,107 @@
+body {
+	font-family: Arial, sans-serif;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	min-height: 100vh;
+	margin: 0;
+	background-color: #f4f4f4;
+}
+
+.container {
+	width: 80%;
+	max-width: 800px;
+	background-color: #fff;
+	padding: 30px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	margin-top: 50px;
+}
+
+h1 {
+	text-align: center;
+	color: #333;
+	margin-bottom: 30px;
+}
+
+form div {
+	margin-bottom: 15px;
+}
+
+form label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+	color: #555;
+}
+
+form input[type="text"], form textarea, form input[type="file"] {
+	width: calc(100% - 22px);
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 16px;
+}
+
+form textarea {
+	resize: vertical;
+	min-height: 150px;
+}
+
+.button-group {
+	text-align: right;
+	margin-top: 20px;
+}
+
+.submit-button, .cancel-button {
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+	background-color: #218838;
+}
+
+.cancel-button {
+	background-color: #6c757d;
+	color: white;
+}
+
+.cancel-button:hover {
+	background-color: #5a6268;
+}
+/* 에러 메시지 스타일 */
+.error-message {
+	color: #dc3545; /* 빨간색 */
+	font-size: 0.9em;
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+.message-error { /* 컨트롤러에서 던지는 일반 에러 메시지 */
+	color: #721c24;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	padding: 12px 20px;
+	margin-bottom: 25px;
+	border-radius: 6px;
+	text-align: center;
+	font-weight: 500;
+	font-size: 0.95em;
+}
+
+.message-success {
+	color: #0f5132;
+	background-color: #d1e7dd;
+	border: 1px solid #badbcc;
+	padding: 12px 20px;
+	margin-bottom: 25px;
+	border-radius: 6px;
+	text-align: center;
+	font-weight: 500;
+	font-size: 0.95em;
+}

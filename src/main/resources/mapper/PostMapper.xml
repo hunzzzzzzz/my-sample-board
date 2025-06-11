@@ -36,7 +36,20 @@
 							title LIKE '%' || #{keyword} || '%' OR content LIKE '%' || #{keyword} || '%'
 						</if>
 					</where>
-					ORDER BY id DESC
+					<choose>
+	                    <when test="sort != null and sort.name() == 'LATEST'">
+	                        ORDER BY id DESC
+	                    </when>
+	                    <when test="sort != null and sort.name() == 'OLDEST'">
+	                        ORDER BY id ASC
+	                    </when>
+	                    <when test="sort != null and sort.name() == 'MOST_VIEWED'">
+	                        ORDER BY view_count DESC
+	                    </when>
+						<otherwise>
+							ORDER BY id DESC
+						</otherwise>
+					</choose>
 				) a
 			WHERE ROWNUM &lt;= #{offset} + #{pageSize}
 			)
@@ -45,6 +58,11 @@
 
 	<select id="countAllPosts">
 		SELECT COUNT(*) FROM t_board_post
+			<where>
+				<if test="keyword != null and keyword != ''">
+					title LIKE '%' || #{keyword} || '%' OR content LIKE '%' || #{keyword} || '%'
+				</if>
+			</where>
 	</select>
 
 	<insert id="add">
