@@ -2,11 +2,13 @@ package com.example.board.domain.file.entity;
 
 import java.util.UUID;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class File {
 	private UUID fileId;
 	private long postId;

@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
+<%-- Add this for string functions like startsWith, contains --%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%-- Add this for number formatting like file size --%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,24 +33,90 @@
 
 			<div>
 				<label for="title">제목:</label> <input type="text" id="title"
-					name="title" required value="${request.title}">
+					name="title" required value="${post.title}">
 				<div id="titleError" class="error-message" style="display: none;"></div>
 			</div>
 			<div>
 				<label for="author">작성자:</label> <input type="text" id="author"
 					name="author" required
-					value="<c:choose><c:when test="${not empty request.author}">${request.author}</c:when><c:otherwise>익명</c:otherwise></c:choose>">
+					value="<c:choose><c:when test="${not empty post.author}">${post.author}</c:when><c:otherwise>익명</c:otherwise></c:choose>">
 				<div id="authorError" class="error-message" style="display: none;"></div>
 			</div>
 			<div>
 				<label for="content">내용:</label>
-				<textarea id="content" name="content" required>${request.content}</textarea>
+				<textarea id="content" name="content" required>${post.content}</textarea>
 				<div id="contentError" class="error-message" style="display: none;"></div>
 			</div>
 
+			<c:if test="${isEditMode}">
+				<div class="existing-files-group">
+					<label>기존 첨부 파일:</label>
+					<div id="existingFiles">
+						<c:if test="${not empty post.files}">
+							<%-- 'post' object (e.g., PostResponse) must contain a 'files' list --%>
+							<ul>
+								<c:forEach var="file" items="${post.files}">
+									<li>
+										<%-- SVG icon based on file type --%> <c:choose>
+											<c:when test="${fn:startsWith(file.fileType, 'image/')}">
+												<img src="/icons/image.svg" alt="이미지 파일" class="file-icon">
+											</c:when>
+											<c:when test="${file.fileType eq 'application/pdf'}">
+												<img src="/icons/pdf.svg" alt="PDF 파일" class="file-icon">
+											</c:when>
+											<c:when test="${fn:contains(file.fileType, 'wordprocess')}">
+												<img src="/icons/word.svg" alt="워드 문서" class="file-icon">
+											</c:when>
+											<c:when
+												test="${fn:contains(file.fileType, 'excel') || fn:contains(file.fileType, 'spreadsheet')}">
+												<img src="/icons/excel.svg" alt="엑셀 문서" class="file-icon">
+											</c:when>
+											<c:when
+												test="${fn:contains(file.fileType, 'powerpoint') || fn:contains(file.fileType, 'presentation')}">
+												<img src="/icons/ppt.svg" alt="파워포인트 문서" class="file-icon">
+											</c:when>
+											<c:when
+												test="${file.fileType eq 'application/zip' || file.fileType eq 'application/x-zip-compressed'}">
+												<img src="/icons/zip.svg" alt="압축 파일" class="file-icon">
+											</c:when>
+											<c:otherwise>
+												<img src="/icons/file.svg" alt="기타 파일" class="file-icon">
+											</c:otherwise>
+										</c:choose> <%-- Download link --%> <a href="/files/${file.fileId}"
+										target="_blank"> <c:out value="${file.originalFileName}" />
+									</a> <%-- File size display --%> <span class="file-size"> (<c:choose>
+												<c:when test="${file.fileSize eq 0}">
+                                                    0KB
+                                                </c:when>
+												<c:when test="${file.fileSize ge (1024 * 1024)}">
+													<fmt:formatNumber value="${file.fileSize / (1024 * 1024)}"
+														pattern="#.#" />MB
+                                                </c:when>
+												<c:when test="${file.fileSize ge 1024}">
+													<fmt:formatNumber value="${file.fileSize / 1024}"
+														pattern="#.#" />KB
+                                                </c:when>
+												<c:otherwise>
+													<c:out value="${file.fileSize}" />Bytes
+                                                </c:otherwise>
+											</c:choose>)
+									</span> <%-- TODO: Add a remove button if you want to allow deleting existing files --%>
+									</li>
+								</c:forEach>
+							</ul>
+						</c:if>
+						<c:if test="${empty post.files}">
+							<p class="no-existing-files-message">첨부된 파일이 없습니다.</p>
+						</c:if>
+					</div>
+				</div>
+			</c:if>
+
 			<div class="form-group">
-				<label for="file">첨부 파일:</label> <input type="file" id="file"
-					name="multipartFile" class="form-control" multiple>
+				<label for="files">새로운 첨부 파일:</label>
+				<%-- Changed label for clarity --%>
+				<input type="file" id="files" name="files" class="form-control"
+					multiple>
 			</div>
 
 			<div class="button-group">

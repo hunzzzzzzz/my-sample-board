@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,6 +67,67 @@ h1 {
 	min-height: 200px;
 	white-space: pre-wrap;
 	word-wrap: break-word;
+}
+
+.file-list-group {
+	margin-top: 30px;
+	padding-top: 20px;
+	border-top: 1px solid #e9ecef;
+}
+
+.file-list-group label {
+	font-weight: bold;
+	color: #2c3e50;
+	margin-bottom: 15px;
+	display: block;
+	font-size: 1.1em;
+}
+
+#attachedFiles ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#attachedFiles li {
+	background-color: #f0f0f0; /* 밝은 회색 배경 */
+	border: 1px solid #e0e0e0;
+	padding: 10px 15px;
+	margin-bottom: 8px;
+	border-radius: 6px;
+	display: flex; /* flexbox를 사용하여 아이콘과 텍스트 정렬 */
+	align-items: center;
+	gap: 10px; /* 아이콘과 텍스트 사이 간격 */
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
+}
+/* ⭐⭐ 새로 추가된 CSS: SVG 아이콘 크기 및 정렬 ⭐⭐ */
+.file-icon {
+	width: 24px; /* 아이콘 너비 */
+	height: 24px; /* 아이콘 높이 */
+	flex-shrink: 0; /* 아이콘이 공간 부족 시 줄어들지 않도록 */
+}
+/* ⭐⭐ 새로 추가된 CSS 끝 ⭐⭐ */
+#attachedFiles li a {
+	text-decoration: none;
+	color: #007bff; /* 파란색 링크 */
+	font-weight: 600;
+	flex-grow: 1; /* 이름이 길 경우 공간을 차지하도록 */
+}
+
+#attachedFiles li a:hover {
+	text-decoration: underline;
+}
+
+.file-size {
+	color: #6c757d; /* 회색 텍스트 */
+	font-size: 0.85em;
+	white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+.no-files-message {
+	color: #6c757d;
+	font-style: italic;
+	padding: 10px 0;
 }
 
 .button-group {
@@ -180,10 +243,73 @@ h1 {
 
 		<div class="post-content">${post.content}</div>
 
+		<div class="file-list-group">
+			<label>첨부 파일</label>
+			<div id="attachedFiles">
+				<c:if test="${not empty post.files}">
+					<ul>
+						<c:forEach var="file" items="${post.files}">
+							<li>
+								<%-- ⭐ 파일 타입에 따른 SVG 아이콘 ⭐ --%> <c:choose>
+									<c:when test="${fn:startsWith(file.fileType, 'image/')}">
+										<img src="/icons/image.svg" alt="이미지 파일" class="file-icon">
+									</c:when>
+									<c:when test="${file.fileType eq 'application/pdf'}">
+										<img src="/icons/pdf.svg" alt="PDF 파일" class="file-icon">
+									</c:when>
+									<c:when test="${fn:contains(file.fileType, 'wordprocess')}">
+										<img src="/icons/word.svg" alt="워드 문서" class="file-icon">
+									</c:when>
+									<c:when
+										test="${fn:contains(file.fileType, 'excel') || fn:contains(file.fileType, 'spreadsheet')}">
+										<img src="/icons/excel.svg" alt="엑셀 문서" class="file-icon">
+									</c:when>
+									<c:when
+										test="${fn:contains(file.fileType, 'powerpoint') || fn:contains(file.fileType, 'presentation')}">
+										<img src="/icons/ppt.svg" alt="파워포인트 문서" class="file-icon">
+									</c:when>
+									<c:when
+										test="${file.fileType eq 'application/zip' || file.fileType eq 'application/x-zip-compressed'}">
+										<img src="/icons/zip.svg" alt="압축 파일" class="file-icon">
+									</c:when>
+									<c:otherwise>
+										<img src="/icons/file.svg" alt="기타 파일" class="file-icon">
+									</c:otherwise>
+								</c:choose> <%-- 다운로드 링크 --%> <a href="/files/${file.fileId}"
+								target="_blank"> <c:out value="${file.originalFileName}" />
+							</a> <%-- 파일 크기 표시 (fmt:formatNumber 사용) --%> <span class="file-size">
+									(<c:choose>
+										<c:when test="${file.fileSize eq 0}">
+											<%-- ⭐ 파일 크기가 0인 경우 추가 ⭐ --%>
+											0KB
+										</c:when>
+										<c:when test="${file.fileSize ge (1024 * 1024)}">
+											<fmt:formatNumber value="${file.fileSize / (1024 * 1024)}"
+												pattern="#.#" />MB
+										</c:when>
+										<c:when test="${file.fileSize ge 1024}">
+											<fmt:formatNumber value="${file.fileSize / 1024}"
+												pattern="#.#" />KB
+										</c:when>
+										<c:otherwise>
+											<c:out value="${file.fileSize}" />Bytes
+										</c:otherwise>
+									</c:choose>)
+							</span>
+							</li>
+						</c:forEach>
+					</ul>
+				</c:if>
+				<c:if test="${empty post.files}">
+					<p class="no-files-message">첨부 파일이 없습니다.</p>
+				</c:if>
+			</div>
+		</div>
 		<div class="button-group">
-			<a href="/posts/edit/${postId}" class="action-button edit-button">수정</a>
+			<a href="/posts/edit/${post.postId}"
+				class="action-button edit-button">수정</a>
 			<button type="button" class="action-button delete-button"
-				onclick="deletePost(${postId})">삭제</button>
+				onclick="deletePost(${post.postId})">삭제</button>
 			<a href="/posts" class="action-button back-button">목록으로</a>
 		</div>
 	</div>

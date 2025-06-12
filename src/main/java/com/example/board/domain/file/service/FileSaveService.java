@@ -7,70 +7,96 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.board.domain.file.entity.File;
 import com.example.board.domain.file.mapper.FileMapper;
+import com.example.board.global.component.FileHandler;
+import com.example.board.global.exception.FileStorageException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class FileSaveService {
+	private final FileHandler fileHandler;
 	private final FileMapper fileMapper;
-	private static final String FILE_NAME_PATTERN = "posts-%s-%s.%s";
-	private final String uploadDir = "C:\\workspace\\files\\";
+	private final String uploadDir;
 
-	public FileSaveService(FileMapper fileMapper) {
-		this.fileMapper = fileMapper;
-
+	private void checkIfDirectoryExists() {
 		try {
 			Path uploadPath = Paths.get(uploadDir);
 
-			// 디렉토리가 존재하지 않는 경우, 디렉터리를 생성한다.
-			if (!Files.exists(uploadPath))
+			if (!Files.exists(uploadPath)) {
 				Files.createDirectories(uploadPath);
+
+				log.info("디렉터리 생성: {}", uploadDir);
+			}
 		} catch (IOException e) {
-			System.out.println(e.getMessage()); // TODO: 추후 로깅 처리
+			log.error("디렉터리 생성 실패: {}", uploadDir, e);
+
+			throw new FileStorageException("디렉터리 생성 실패: " + uploadDir);
 		}
 	}
 
-	private String getExtension(String fileName) {
-		int indexOfComma = fileName.lastIndexOf('.');
+	public FileSaveService(
+			FileHandler fileHandler, 
+			FileMapper fileMapper,
+			@Value("${file.upload.dir}") String uploadDir
+	) {
+		this.fileHandler = fileHandler;
+		this.fileMapper = fileMapper;
+		this.uploadDir = uploadDir;
 
-		return fileName.substring(indexOfComma + 1);
+		checkIfDirectoryExists();
 	}
 
-	private UUID createRandomUUID() {
-		return UUID.randomUUID();
-	}
+	private void saveFile(long postId, MultipartFile multipartFile) {
+		try {
+			// 검증
+			fileHandler.validateFile(multipartFile);
 
-	private String createNewFileName(long postId, MultipartFile multipartFile) {
-		return FILE_NAME_PATTERN.formatted(postId, UUID.randomUUID(),
-				getExtension(multipartFile.getOriginalFilename()));
+			// 파일명 생성
+			UUID fileId = UUID.randomUUID();
+			String savedFileName = fileHandler.createNewFileName("posts", postId, fileId, multipartFile);
+
+			// 저장
+			saveFileInPath(multipartFile, savedFileName);
+			saveFileInDb(postId, fileId, multipartFile, savedFileName);
+		} catch (IOException e) {
+			log.error("파일 저장 실패: {}", postId, e);
+
+			throw new FileStorageException("파일 저장 실패: " + multipartFile.getOriginalFilename());
+		}
+
 	}
 
 	private void saveFileInPath(MultipartFile multipartFile, String savedFileName) throws IOException {
 		Path filePath = Paths.get(uploadDir, savedFileName);
 
-		Files.copy(multipartFile.getInputStream(), filePath);
+		Files.copy(
+				multipartFile.getInputStream(), 
+				filePath
+		);
 	}
 
-	private void saveFileInDb(long postId, MultipartFile multipartFile, String savedFileName) {
-		File file = new File(createRandomUUID(), postId, multipartFile.getOriginalFilename(), savedFileName, uploadDir,
-				multipartFile.getSize(), multipartFile.getContentType());
+	private void saveFileInDb(long postId, UUID fileId, MultipartFile multipartFile, String savedFileName) {
+		File file = File.builder()
+				.fileId(fileId)
+				.postId(postId)
+				.originalFileName(multipartFile.getOriginalFilename())
+				.savedFileName(savedFileName)
+				.path(uploadDir)
+				.fileSize(multipartFile.getSize())
+				.fileType(multipartFile.getContentType())
+				.build();
+
 		fileMapper.save(file);
 	}
 
-	public void add(long postId, List<MultipartFile> files) {
-		try {
-			for (MultipartFile multipartFile : files) {
-				String savedFileName = createNewFileName(postId, multipartFile);
-
-				saveFileInPath(multipartFile, savedFileName);
-				saveFileInDb(postId, multipartFile, savedFileName);
-			}
-		} catch (IOException e) {
-			System.out.println(e.getMessage()); // TODO: 추후 로깅 처리
-		}
-
+	public void save(long postId, List<MultipartFile> files) {
+		files.forEach((file) -> saveFile(postId, file));
 	}
 }

@@ -21,3 +21,10 @@ spring:
       max-request-size: 100MB
       file-size-threshold: 2KB
       location: /tmp/upload
+      
+---
+
+file:
+  upload:
+    dir: ${FILE_UPLOAD_DIR:C:/workspace/files/}
+    

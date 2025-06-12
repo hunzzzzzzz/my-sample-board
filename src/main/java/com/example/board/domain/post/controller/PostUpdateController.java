@@ -35,11 +35,12 @@ public class PostUpdateController {
 	String showEditForm(Model model, @PathVariable long postId) {
 		// postId를 활용해서 기존 게시글 정보 조회
 		PostDetailResponse post = postGetService.get(postId);
-		PostUpdateRequest request = PostUpdateRequest.builder().title(post.getTitle()).content(post.getContent())
-				.author(post.getAuthor()).build();
+//		PostUpdateRequest request = PostUpdateRequest.builder().title(post.getTitle()).content(post.getContent())
+//				.author(post.getAuthor()).build();
 
 		model.addAttribute("postId", postId);
-		model.addAttribute("request", request);
+//		model.addAttribute("request", request);
+		model.addAttribute("post", post);
 		model.addAttribute("isEditMode", true);
 
 		return "post-form";
