@@ -6,11 +6,13 @@ import java.util.List;
 import com.example.board.domain.file.dto.response.FileResponse;
 import com.example.board.domain.post.entity.PostStatus;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class PostDetailResponse {
 	private long postId;
 	private PostStatus status;
@@ -21,7 +23,7 @@ public class PostDetailResponse {
 	private LocalDateTime createdAt;
 	private String formattedCreatedAt;
 	private LocalDateTime updatedAt;
-	private String formattedUpdatedAt;
 	private Boolean isUpdated;
+	private String formattedUpdatedAt;
 	private List<FileResponse> files;
 }

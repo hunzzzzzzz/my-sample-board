@@ -11,28 +11,24 @@ import com.example.board.domain.post.dto.response.PostResponse;
 import com.example.board.domain.post.entity.SortCondition;
 import com.example.board.domain.post.service.PostListService;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Controller
 public class PostListController {
 	private final PostListService postListService;
 
-	public PostListController(PostListService postListService) {
-		this.postListService = postListService;
-	}
-
-	@GetMapping({"/", "/posts"})
-	String getAll(
-			Model model, 
-			@RequestParam(required = false, defaultValue = "1") int page,
+	@GetMapping({ "/", "/posts" })
+	String getAll(Model model, @RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false) String keyword,
-			@RequestParam(required = false, defaultValue = "LATEST") String sort
-	) {
+			@RequestParam(required = false, defaultValue = "LATEST") String sort) {
 		List<PostResponse> posts = postListService.getAll(page, keyword, SortCondition.valueOf(sort));
 		int totalPages = postListService.getTotalPages(keyword);
 
 		model.addAttribute("posts", posts);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", totalPages);
-		if (keyword != null) 
+		if (keyword != null)
 			model.addAttribute("keyword", keyword);
 
 		return "posts";

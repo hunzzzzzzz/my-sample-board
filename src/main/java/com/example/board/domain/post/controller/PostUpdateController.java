@@ -34,7 +34,7 @@ public class PostUpdateController {
 	@GetMapping("/posts/edit/{postId}")
 	String showEditForm(Model model, @PathVariable long postId) {
 		// postId를 활용해서 기존 게시글 정보 조회
-		PostDetailResponse post = postGetService.get(postId);
+		PostDetailResponse post = postGetService.get(postId, false);
 
 		model.addAttribute("postId", postId);
 		model.addAttribute("post", post);

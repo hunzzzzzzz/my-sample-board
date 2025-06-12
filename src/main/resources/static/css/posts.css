@@ -128,7 +128,7 @@ table {
 	overflow: hidden;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	box-sizing: border-box;
-	table-layout: fixed;
+	table-layout: fixed; /* 테이블 레이아웃을 고정하여 colgroup 너비 적용 */
 }
 
 /* colgroup을 통해 각 컬럼의 초기 너비 설정 */
@@ -136,17 +136,18 @@ table colgroup col:nth-child(1) {
 	width: 50px;
 } /* ID */
 table colgroup col:nth-child(2) {
-	width: 25%;
+	width: 50%;
 } /* 제목 */
 table colgroup col:nth-child(3) {
-	width: 100px;
-} /* 작성자 */
+	width: 125px;
+} /* ⭐ 작성자 - 너비 조정됨 (120px) ⭐ */
 table colgroup col:nth-child(4) {
-	width: 110px;
+	width: 100px;
 } /* 조회수 */
 table colgroup col:nth-child(5) {
 	width: 120px;
 } /* 작성일 */
+
 table thead tr {
 	background-color: #f8f9fa;
 	border-bottom: 1px solid #dee2e6;

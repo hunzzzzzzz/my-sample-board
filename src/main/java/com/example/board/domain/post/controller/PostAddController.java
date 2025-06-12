@@ -40,7 +40,7 @@ public class PostAddController {
 	/**
 	 * 클라이언트로부터 제출된 게시글 등록 요청을 처리하는 메서드
 	 *
-	 * @param request 클라이언트로부터 받은 게시글 등록 데이터 (제목, 내용, 작성자, 파일 등)
+	 * @param request       클라이언트로부터 받은 게시글 등록 데이터 (제목, 내용, 작성자, 파일 등)
 	 * @param bindingResult 요청 데이터 유효성 검사 결과를 담는 객체
 	 * @return 처리 결과에 따른 HTTP 응답 (성공 시 201 Created, 실패 시 400 Bad Request)
 	 */

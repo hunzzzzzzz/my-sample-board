@@ -23,5 +23,7 @@ public interface PostMapper {
 	void update(long postId, PostUpdateRequest request);
 
 	void delete(long postId, String deletedTitle);
+	
+	void incrementViewCount(long postId);
 
 }
