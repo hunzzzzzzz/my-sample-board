@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.board.global.exception.InvalidFileException;
+import com.example.board.global.exception.file.InvalidFileException;
 
 @ExtendWith(MockitoExtension.class)
 class FileHandlerTest {

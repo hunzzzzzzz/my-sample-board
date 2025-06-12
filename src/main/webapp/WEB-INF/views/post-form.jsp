@@ -120,7 +120,7 @@
 			<div class="form-group">
 				<label for="newFiles">새로운 첨부 파일:</label>
 				<%-- ⭐ name="newFiles"로 변경 ⭐ --%>
-				<input type="file" id="newFiles" name="newFiles" class="form-control"
+				<input type="file" id="newFiles" name="files" class="form-control"
 					multiple>
 			</div>
 			

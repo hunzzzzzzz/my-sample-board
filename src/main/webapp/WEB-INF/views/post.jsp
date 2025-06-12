@@ -90,28 +90,28 @@ h1 {
 }
 
 #attachedFiles li {
-	background-color: #f0f0f0; /* 밝은 회색 배경 */
+	background-color: #f0f0f0;
 	border: 1px solid #e0e0e0;
 	padding: 10px 15px;
 	margin-bottom: 8px;
 	border-radius: 6px;
-	display: flex; /* flexbox를 사용하여 아이콘과 텍스트 정렬 */
+	display: flex;
 	align-items: center;
-	gap: 10px; /* 아이콘과 텍스트 사이 간격 */
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
+	gap: 10px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
-/* ⭐⭐ 새로 추가된 CSS: SVG 아이콘 크기 및 정렬 ⭐⭐ */
+
 .file-icon {
-	width: 24px; /* 아이콘 너비 */
-	height: 24px; /* 아이콘 높이 */
-	flex-shrink: 0; /* 아이콘이 공간 부족 시 줄어들지 않도록 */
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
 }
-/* ⭐⭐ 새로 추가된 CSS 끝 ⭐⭐ */
+
 #attachedFiles li a {
 	text-decoration: none;
-	color: #007bff; /* 파란색 링크 */
+	color: #007bff;
 	font-weight: 600;
-	flex-grow: 1; /* 이름이 길 경우 공간을 차지하도록 */
+	flex-grow: 1;
 }
 
 #attachedFiles li a:hover {
@@ -119,9 +119,9 @@ h1 {
 }
 
 .file-size {
-	color: #6c757d; /* 회색 텍스트 */
+	color: #6c757d;
 	font-size: 0.85em;
-	white-space: nowrap; /* 줄바꿈 방지 */
+	white-space: nowrap;
 }
 
 .no-files-message {
@@ -179,7 +179,7 @@ h1 {
 	transform: translateY(-2px);
 }
 
-/* 기존 메시지 스타일 활용 */
+/* JavaScript로 동적으로 표시할 메시지 스타일 */
 .message-success {
 	color: #155724;
 	background-color: #d4edda;
@@ -190,7 +190,7 @@ h1 {
 	text-align: center;
 	font-weight: 500;
 	font-size: 0.95em;
-	display: block; /* 기본적으로는 block으로 표시 */
+	display: block;
 }
 
 .message-error {
@@ -203,33 +203,16 @@ h1 {
 	text-align: center;
 	font-weight: 500;
 	font-size: 0.95em;
-	display: block; /* 기본적으로는 block으로 표시 */
-}
-/* JavaScript에서 메시지를 숨길 때 사용할 클래스 */
-.hidden-message {
-	display: none !important;
+	display: block;
 }
 </style>
 </head>
 <body>
 	<div class="container">
-		<%-- 기존 메시지 표시 영역: JSP에서 전달받은 message/error --%>
-		<c:if test="${not empty message}">
-			<div id="initialSuccessMessage" class="message-success">
-				<p>${message}</p>
-			</div>
-		</c:if>
-		<c:if test="${not empty error}">
-			<div id="initialErrorMessage" class="message-error">
-				<p>${error}</p>
-			</div>
-		</c:if>
-
-		<%-- ⭐ JavaScript로 동적으로 표시할 메시지 영역 --%>
+		<%-- JavaScript로 동적으로 표시할 메시지 영역 --%>
 		<div id="dynamicMessage" style="display: none;">
 			<p></p>
 		</div>
-
 
 		<h1>${post.title}</h1>
 
@@ -250,7 +233,7 @@ h1 {
 					<ul>
 						<c:forEach var="file" items="${post.files}">
 							<li>
-								<%-- ⭐ 파일 타입에 따른 SVG 아이콘 ⭐ --%> <c:choose>
+								<%-- 파일 타입에 따른 SVG 아이콘 --%> <c:choose>
 									<c:when test="${fn:startsWith(file.fileType, 'image/')}">
 										<img src="/icons/image.svg" alt="이미지 파일" class="file-icon">
 									</c:when>
@@ -280,7 +263,6 @@ h1 {
 							</a> <%-- 파일 크기 표시 (fmt:formatNumber 사용) --%> <span class="file-size">
 									(<c:choose>
 										<c:when test="${file.fileSize eq 0}">
-											<%-- ⭐ 파일 크기가 0인 경우 추가 ⭐ --%>
 											0KB
 										</c:when>
 										<c:when test="${file.fileSize ge (1024 * 1024)}">
@@ -315,24 +297,6 @@ h1 {
 	</div>
 
 	<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 페이지 로드 시 기존 메시지 (if any)를 1.5초 후 숨김
-            const initialSuccessMessage = document.getElementById('initialSuccessMessage');
-            const initialErrorMessage = document.getElementById('initialErrorMessage');
-
-            if (initialSuccessMessage) {
-                setTimeout(() => {
-                    initialSuccessMessage.classList.add('hidden-message');
-                }, 1500);
-            }
-            if (initialErrorMessage) {
-                setTimeout(() => {
-                    initialErrorMessage.classList.add('hidden-message');
-                }, 1500);
-            }
-        });
-
-
         // JavaScript로 동적으로 메시지를 표시하는 함수
         function displayDynamicMessage(message, type) {
             const dynamicMessageDiv = document.getElementById('dynamicMessage');

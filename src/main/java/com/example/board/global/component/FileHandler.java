@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.board.global.exception.InvalidFileException;
+import com.example.board.global.exception.file.InvalidFileException;
 
 @Component
 public class FileHandler {
@@ -26,9 +26,11 @@ public class FileHandler {
 	}
 	
 	public boolean hasFiles(List<MultipartFile> files) {
+		if (files == null) return false;
+		
 		List<MultipartFile> actualFiles = files.stream().filter(file -> !file.isEmpty()).collect(Collectors.toList());
-
-		return files != null && actualFiles.size() > 0;
+		
+		return actualFiles.size() > 0;
 	}
 
 

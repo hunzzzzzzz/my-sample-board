@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.board.domain.file.entity.File;
 import com.example.board.domain.file.mapper.FileMapper;
 import com.example.board.global.component.FileHandler;
-import com.example.board.global.exception.FileStorageException;
+import com.example.board.global.exception.file.FileStorageException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,7 +56,7 @@ public class FileSaveService {
 	private void saveFile(long postId, MultipartFile multipartFile) {
 		try {
 			// 검증
-			fileHandler.validateFile(multipartFile);
+			fileHandler.validateFileExtension(multipartFile);
 
 			// 파일명 생성
 			UUID fileId = UUID.randomUUID();
@@ -97,6 +97,10 @@ public class FileSaveService {
 	}
 
 	public void save(long postId, List<MultipartFile> files) {
+		// 첨부파일이 존재하지 않는 경우 해당 메서드 종료
+		if (!fileHandler.hasFiles(files)) return;
+		
+		// 파일 저장
 		files.forEach((file) -> saveFile(postId, file));
 	}
 }

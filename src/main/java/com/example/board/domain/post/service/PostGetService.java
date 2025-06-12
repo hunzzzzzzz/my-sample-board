@@ -6,50 +6,41 @@ import com.example.board.domain.post.dto.response.PostDetailResponse;
 import com.example.board.domain.post.entity.PostStatus;
 import com.example.board.domain.post.mapper.PostMapper;
 import com.example.board.global.component.TimeFormatter;
-import com.example.board.global.exception.PostException;
+import com.example.board.global.exception.post.PostAccessException;
+import com.example.board.global.exception.post.PostNotFoundException;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Service
 public class PostGetService {
 	private PostMapper postMapper;
 	private TimeFormatter timeFormatter;
 
-	public PostGetService(PostMapper postMapper, TimeFormatter timeFormatter) {
-		this.postMapper = postMapper;
-		this.timeFormatter = timeFormatter;
-	}
-
-	private PostDetailResponse getPost(long postId) {
-		PostDetailResponse post = postMapper.get(postId);
-
+	private void validate(PostDetailResponse post) {
 		if (post == null)
-			throw new PostException("존재하지 않는 게시글입니다.");
-		return post;
-	}
+			throw new PostNotFoundException("존재하지 않는 게시글입니다.");
 
-	private void checkIfPostWasDeleted(PostDetailResponse post) {
 		if (post.getStatus().equals(PostStatus.DELETED))
-			throw new PostException("접근이 불가능합니다.");
+			throw new PostAccessException("접근이 불가능합니다.");
 	}
 
-	private void formatCreatedAt(PostDetailResponse post) {
+	private void formatDateTime(PostDetailResponse post) {
 		post.setFormattedCreatedAt(timeFormatter.formatTimeIntoYyyyMmDd(post.getCreatedAt()));
-	}
 
-	private void formatUpdatedAt(PostDetailResponse post) {
-		post.setFormattedUpdatedAt(timeFormatter.formatTimeIntoYyyyMmDd(post.getUpdatedAt()));
+		if (post.getIsUpdated() != null)
+			post.setFormattedUpdatedAt(timeFormatter.formatTimeIntoYyyyMmDd(post.getUpdatedAt()));
 	}
 
 	public PostDetailResponse get(long postId) {
 		// 게시글 조회
-		PostDetailResponse post = getPost(postId);
+		PostDetailResponse post = postMapper.get(postId);
 
-		// 삭제된 게시글은 조회 불가능
-		checkIfPostWasDeleted(post);
+		// 검증
+		validate(post);
 
 		// 작성일 및 수정일 포매팅
-		formatCreatedAt(post);
-		if (post.getIsUpdated() != null)
-			formatUpdatedAt(post);
+		formatDateTime(post);
 
 		return post;
 	}

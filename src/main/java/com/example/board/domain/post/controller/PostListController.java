@@ -19,7 +19,7 @@ public class PostListController {
 		this.postListService = postListService;
 	}
 
-	@GetMapping("/posts")
+	@GetMapping({"/", "/posts"})
 	String getAll(
 			Model model, 
 			@RequestParam(required = false, defaultValue = "1") int page,
