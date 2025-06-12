@@ -12,18 +12,14 @@ import com.example.board.domain.file.service.FileSaveService;
 import com.example.board.domain.post.dto.request.PostUpdateRequest;
 import com.example.board.domain.post.mapper.PostMapper;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Service
 public class PostUpdateService {
 	private final FileDeleteService fileDeleteService;
 	private final FileSaveService fileSaveService;
 	private final PostMapper postMapper;
-
-	public PostUpdateService(FileDeleteService fileDeleteService, FileSaveService fileSaveService,
-			PostMapper postMapper) {
-		this.fileDeleteService = fileDeleteService;
-		this.fileSaveService = fileSaveService;
-		this.postMapper = postMapper;
-	}
 
 	boolean hasFiles(List<MultipartFile> files) {
 		List<MultipartFile> actualFiles = files.stream().filter(file -> !file.isEmpty()).collect(Collectors.toList());

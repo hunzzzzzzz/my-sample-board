@@ -15,6 +15,14 @@ public class PostResponse {
 	private String title;
 	private String author;
 	private int viewCount;
+	private int likeCount;
 	private LocalDateTime createdAt;
 	private String formattedCreatedAt;
+
+	public PostResponse(long postId, String title, LocalDateTime createdAt) {
+		this.postId = postId;
+		this.title = title;
+		this.createdAt = createdAt;
+	}
+
 }

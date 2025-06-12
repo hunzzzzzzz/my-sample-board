@@ -6,13 +6,11 @@ import java.util.List;
 import com.example.board.domain.file.dto.response.FileResponse;
 import com.example.board.domain.post.entity.PostStatus;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 public class PostDetailResponse {
 	private long postId;
 	private PostStatus status;
@@ -20,10 +18,19 @@ public class PostDetailResponse {
 	private String content;
 	private String author;
 	private int viewCount;
+	private int likeCount;
 	private LocalDateTime createdAt;
 	private String formattedCreatedAt;
 	private LocalDateTime updatedAt;
 	private Boolean isUpdated;
 	private String formattedUpdatedAt;
 	private List<FileResponse> files;
+	
+	public PostDetailResponse(long postId, PostStatus status, String title, String content) {
+		this.postId = postId;
+		this.status = status;
+		this.title = title;
+		this.content = content;
+	}
+	
 }

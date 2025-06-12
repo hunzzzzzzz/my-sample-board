@@ -14,6 +14,7 @@ public class Post {
 	private String content;
 	private String author;
 	private int viewCount;
+	private int likeCount;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 

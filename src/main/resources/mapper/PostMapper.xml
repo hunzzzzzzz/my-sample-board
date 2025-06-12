@@ -9,6 +9,7 @@
 		<result property="title" column="title" />
 		<result property="author" column="author" />
 		<result property="viewCount" column="view_count" />
+		<result property="likeCount" column="like_count" />
 		<result property="createdAt" column="created_at" />
 	</resultMap>
 
@@ -26,6 +27,7 @@
 		<result property="content" column="content" />
 		<result property="author" column="author" />
 		<result property="viewCount" column="view_count" />
+		<result property="likeCount" column="like_count" />
 		<result property="createdAt" column="created_at" />
 		<result property="updatedAt" column="updated_at"/>
 		<result property="isUpdated" column="is_updated" /> 
@@ -36,7 +38,7 @@
 		SELECT * FROM (
 			SELECT a.*, ROWNUM rnum
 				FROM (
-					SELECT id, status, title, author, view_count, created_at
+					SELECT id, status, title, author, view_count, like_count, created_at
 					FROM t_board_post
 					<where>
 						<if test="keyword != null and keyword != ''">
@@ -87,7 +89,8 @@
 			p.title, 
 			p.content, 
 			p.author, 
-			p.view_count, 
+			p.view_count,
+			p.like_count,
 			p.created_at, 
 			p.updated_at,
 			CASE 
@@ -121,5 +124,26 @@
 			title=#{deletedTitle},
 			status='DELETED'
 		WHERE id=#{postId} 
+	</update>
+	
+	<update id="incrementViewCount">
+		UPDATE t_board_post
+		SET
+			view_count = view_count + 1
+		WHERE id=#{postId}
+	</update>
+	
+	<update id="incrementLikeCount">
+		UPDATE t_board_post
+		SET
+			like_count = like_count + 1
+		WHERE id=#{postId}
+	</update>
+	
+	<update id="decrementLikeCount">
+		UPDATE t_board_post
+		SET
+			like_count = like_count - 1
+		WHERE id=#{postId}
 	</update>
 </mapper>
