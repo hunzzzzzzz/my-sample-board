@@ -22,7 +22,7 @@ public class PostAddService {
 		this.postMapper = postMapper;
 	}
 
-	void save(Post post) {
+	void savePostInDb(Post post) {
 		postMapper.add(post);
 	}
 
@@ -37,7 +37,7 @@ public class PostAddService {
 	public void add(PostAddRequest request) {
 		// 저장
 		Post post = request.toEntity();
-		save(post);
+		savePostInDb(post);
 
 		// 파일 저장
 		if (hasFiles(request.getFiles()))

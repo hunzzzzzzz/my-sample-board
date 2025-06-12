@@ -44,7 +44,7 @@ class FileHandlerTest {
 		when(mockMultipartFile.getOriginalFilename()).thenReturn("test.txt");
 
 		// expected
-		assertDoesNotThrow(() -> fileHandler.validateFile(mockMultipartFile));
+		assertDoesNotThrow(() -> fileHandler.validateFileExtension(mockMultipartFile));
 	}
 
 	@Test
@@ -53,7 +53,7 @@ class FileHandlerTest {
 		when(mockMultipartFile.getOriginalFilename()).thenReturn("no_extension_file");
 
 		// expected
-		assertThrows(InvalidFileException.class, () -> fileHandler.validateFile(mockMultipartFile));
+		assertThrows(InvalidFileException.class, () -> fileHandler.validateFileExtension(mockMultipartFile));
 	}
 
 	@ParameterizedTest

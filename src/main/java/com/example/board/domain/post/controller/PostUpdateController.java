@@ -35,11 +35,8 @@ public class PostUpdateController {
 	String showEditForm(Model model, @PathVariable long postId) {
 		// postId를 활용해서 기존 게시글 정보 조회
 		PostDetailResponse post = postGetService.get(postId);
-//		PostUpdateRequest request = PostUpdateRequest.builder().title(post.getTitle()).content(post.getContent())
-//				.author(post.getAuthor()).build();
 
 		model.addAttribute("postId", postId);
-//		model.addAttribute("request", request);
 		model.addAttribute("post", post);
 		model.addAttribute("isEditMode", true);
 
@@ -47,11 +44,8 @@ public class PostUpdateController {
 	}
 
 	@PutMapping("/posts/{postId}")
-	ResponseEntity<?> update(
-			@Valid @ModelAttribute PostUpdateRequest request,
-			@PathVariable long postId,
-			BindingResult bindingResult
-	) {
+	ResponseEntity<?> update(@Valid @ModelAttribute PostUpdateRequest request, @PathVariable long postId,
+			BindingResult bindingResult) {
 		// 입력값에 오류가 발생한 경우
 		if (bindingResult.hasErrors()) {
 			ErrorResponse errorResponse = ErrorResponse.of(VALIDATION_FAILED_MESSAGE, bindingResult);

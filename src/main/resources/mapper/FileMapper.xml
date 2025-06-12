@@ -3,11 +3,37 @@
 
 <mapper namespace="com.example.board.domain.file.mapper.FileMapper">
 	
+	<resultMap id="fileDownloadResponse" type="com.example.board.domain.file.dto.response.FileDownloadResponse">
+		<id property="fileId" column="id"/>
+		<result property="originalFileName" column="original_file_name"/>
+		<result property="savedFileName" column="saved_file_name"/>
+		<result property="fileType" column="file_type"/>
+	</resultMap>
+	
 	<insert id="save">
 		INSERT INTO t_board_file(id, post_id, original_file_name, saved_file_name, file_path, file_size, file_type)
 		VALUES(#{fileId}, #{postId}, #{originalFileName}, #{savedFileName}, #{path}, #{fileSize}, #{fileType})
 	</insert>
 	
+	<select id="getSavedFileName" resultMap="fileDownloadResponse">
+		SELECT id, original_file_name, saved_file_name, file_type 
+		FROM t_board_file
+		WHERE id = #{fileId, jdbcType=VARCHAR}
+	</select>
 	
-
+	<select id="getSavedFileNames">
+		SELECT saved_file_name FROM t_board_file
+		WHERE id IN
+		<foreach collection="deletedFileIds" item="fileId" separator="," open="(" close=")">
+			#{fileId, jdbcType=VARCHAR}
+		</foreach>
+	</select>
+	
+	<delete id="deleteByFileIds">
+		DELETE FROM t_board_file
+		WHERE id IN
+		<foreach collection="deletedFileIds" item="fileId" separator="," open="(" close=")">
+			#{fileId, jdbcType=VARCHAR}
+		</foreach>
+	</delete>
 </mapper>

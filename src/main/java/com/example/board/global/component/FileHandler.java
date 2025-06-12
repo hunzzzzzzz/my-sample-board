@@ -1,6 +1,8 @@
 package com.example.board.global.component;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,15 +24,16 @@ public class FileHandler {
 
 		return fileName.substring(indexOfComma + 1);
 	}
+	
+	public boolean hasFiles(List<MultipartFile> files) {
+		List<MultipartFile> actualFiles = files.stream().filter(file -> !file.isEmpty()).collect(Collectors.toList());
 
-	/**
-	 * 업로드된 MultipartFile의 유효성을 검사하는 메서드
-	 *
-	 * @param file 유효성을 검사할 MultipartFile 객체
-	 * @throws InvalidFileException 파일이 유효하지 않을 경우 발생
-	 */
-	public void validateFile(MultipartFile file) {
-		if ((file == null) || !file.getOriginalFilename().contains(".") )
+		return files != null && actualFiles.size() > 0;
+	}
+
+
+	public void validateFileExtension(MultipartFile file) {
+		if (!file.getOriginalFilename().contains(".") )
 			throw new InvalidFileException("유효하지 않은 파일입니다.");
 	}
 

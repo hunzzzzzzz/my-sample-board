@@ -56,7 +56,8 @@
 							<%-- 'post' object (e.g., PostResponse) must contain a 'files' list --%>
 							<ul>
 								<c:forEach var="file" items="${post.files}">
-									<li>
+									<%-- ⭐ data-file-id 속성 추가 및 삭제 버튼 추가 ⭐ --%>
+									<li data-file-id="${file.fileId}">
 										<%-- SVG icon based on file type --%> <c:choose>
 											<c:when test="${fn:startsWith(file.fileType, 'image/')}">
 												<img src="/icons/image.svg" alt="이미지 파일" class="file-icon">
@@ -100,7 +101,11 @@
 													<c:out value="${file.fileSize}" />Bytes
                                                 </c:otherwise>
 											</c:choose>)
-									</span> <%-- TODO: Add a remove button if you want to allow deleting existing files --%>
+									</span>
+										<button type="button" class="remove-file-button"
+											data-file-id="${file.fileId}">
+											<img src="/icons/delete.png" alt="삭제" class="delete-icon">
+										</button>
 									</li>
 								</c:forEach>
 							</ul>
@@ -113,15 +118,18 @@
 			</c:if>
 
 			<div class="form-group">
-				<label for="files">새로운 첨부 파일:</label>
-				<%-- Changed label for clarity --%>
-				<input type="file" id="files" name="files" class="form-control"
+				<label for="newFiles">새로운 첨부 파일:</label>
+				<%-- ⭐ name="newFiles"로 변경 ⭐ --%>
+				<input type="file" id="newFiles" name="newFiles" class="form-control"
 					multiple>
 			</div>
+			
+			<%-- ⭐ 삭제할 파일 ID들을 위한 숨겨진 필드 추가 ⭐ --%>
+			<input type="hidden" id="deletedFileIds" name="deletedFileIds" value="">
 
 			<div class="button-group">
 				<button type="button" class="cancel-button"
-					onclick="location.href='/posts'">취소</button>
+					onclick="location.href='/posts/${postId}'">취소</button>
 				<button type="submit" class="submit-button">
 					<c:if test="${isEditMode}">수정 완료</c:if>
 					<c:if test="${not isEditMode}">등록</c:if>
@@ -134,9 +142,42 @@
         document.addEventListener('DOMContentLoaded', function() {
             const postForm = document.getElementById('postForm');
             const isEditMode = ${isEditMode}; // JSP EL로 isEditMode 값 주입
+            
+            // ⭐ 삭제할 파일 ID들을 저장할 배열 ⭐
+            const deletedFileUuids = [];
+            const deletedFileIdsInput = document.getElementById('deletedFileIds');
 
             clearErrors(); // 페이지 로드 시 기존 에러 메시지 초기화
             clearServerMessage(); // 페이지 로드 시 기존 서버 메시지 초기화
+
+            // ⭐ 삭제 버튼 클릭 이벤트 리스너 추가 ⭐
+            if (isEditMode) {
+                document.querySelectorAll('.remove-file-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const fileIdToRemove = this.dataset.fileId; // data-file-id 속성에서 ID 가져오기
+                        const listItem = this.closest('li'); // 해당 파일의 <li> 요소 찾기
+
+                        if (confirm('이 파일을 정말 삭제하시겠습니까?')) {
+                            // DOM에서 해당 파일 항목 제거
+                            if (listItem) {
+                                listItem.remove();
+                            }
+                            // 삭제할 파일 ID 배열에 추가
+                            deletedFileUuids.push(fileIdToRemove);
+                            console.log('삭제될 파일 ID:', deletedFileUuids);
+
+                            // 만약 모든 파일이 삭제되면 "첨부된 파일이 없습니다." 메시지 표시
+                            const existingFilesList = document.querySelector('#existingFiles ul');
+                            if (existingFilesList && existingFilesList.children.length === 0) {
+                                const noFilesMessage = document.createElement('p');
+                                noFilesMessage.className = 'no-existing-files-message';
+                                noFilesMessage.textContent = '첨부된 파일이 없습니다.';
+                                document.getElementById('existingFiles').appendChild(noFilesMessage);
+                            }
+                        }
+                    });
+                });
+            }
 
             postForm.addEventListener('submit', async function(event) {
                 event.preventDefault(); // 폼의 기본 제출 동작 막기
@@ -147,6 +188,15 @@
                 const form = event.target;
                 const formData = new FormData(form); // 폼 데이터 객체 생성 (파일 포함 가능)
 
+                // ⭐ 삭제할 파일 ID들을 FormData에 추가 ⭐
+                if (deletedFileUuids.length > 0) {
+                    // deletedFileIdsInput.value = deletedFileUuids.join(','); // 숨겨진 필드에 콤마로 구분된 문자열 저장
+                    // FormData에 직접 추가하는 것이 더 유연합니다 (스프링이 List<UUID>로 바인딩하기 쉬움)
+                    deletedFileUuids.forEach(uuid => {
+                        formData.append('deletedFileIds', uuid);
+                    });
+                }
+                
                 // HTTP 메서드 설정: 등록 시 POST, 수정 시 PUT
                 let httpMethod = 'POST';
                 if (isEditMode) {

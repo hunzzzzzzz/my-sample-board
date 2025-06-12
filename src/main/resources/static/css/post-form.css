@@ -74,6 +74,7 @@ form textarea {
 .cancel-button:hover {
 	background-color: #5a6268;
 }
+
 /* Error message style */
 .error-message {
 	color: #dc3545; /* Red */
@@ -108,57 +109,150 @@ form textarea {
 
 /* --- Styles for Existing Files List (New additions) --- */
 .existing-files-group {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #e0e0e0;
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid #e0e0e0;
 }
 
 .existing-files-group label {
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 10px;
-    display: block;
-    font-size: 1em;
+	font-weight: bold;
+	color: #2c3e50;
+	margin-bottom: 10px;
+	display: block;
+	font-size: 1em;
 }
 
 #existingFiles ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
+
 #existingFiles li {
-    background-color: #f8f8f8; /* Background color for existing file list items */
-    border: 1px solid #dee2e6;
-    padding: 8px 12px;
-    margin-bottom: 6px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Space between icon and text */
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+	background-color: #f8f8f8;
+	/* Background color for existing file list items */
+	border: 1px solid #dee2e6;
+	padding: 8px 12px;
+	margin-bottom: 6px;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	gap: 8px; /* Space between icon and text */
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
+
 .file-icon {
-    width: 20px;   /* Icon width */
-    height: 20px;  /* Icon height */
-    flex-shrink: 0; /* Prevent icon from shrinking */
+	width: 20px; /* Icon width */
+	height: 20px; /* Icon height */
+	flex-shrink: 0; /* Prevent icon from shrinking */
 }
+
 #existingFiles li a {
-    text-decoration: none;
-    color: #495057; /* Link color adjusted */
-    font-weight: 500;
-    flex-grow: 1;
+	text-decoration: none;
+	color: #495057; /* Link color adjusted */
+	font-weight: 500;
+	flex-grow: 1;
 }
+
 #existingFiles li a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
+
 .file-size {
-    color: #6c757d;
-    font-size: 0.8em;
-    white-space: nowrap;
+	color: #6c757d;
+	font-size: 0.8em;
+	white-space: nowrap;
 }
+
 .no-existing-files-message {
-    color: #6c757d;
-    font-style: italic;
-    padding: 5px 0;
-    font-size: 0.9em;
+	color: #6c757d;
+	font-style: italic;
+	padding: 5px 0;
+	font-size: 0.9em;
+}
+
+/* --- Styles for Existing Files List (Original additions) --- */
+.existing-files-group {
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.existing-files-group label {
+	font-weight: bold;
+	color: #2c3e50;
+	margin-bottom: 10px;
+	display: block;
+	font-size: 1em;
+}
+
+#existingFiles ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#existingFiles li {
+	background-color: #f8f8f8;
+	/* Background color for existing file list items */
+	border: 1px solid #dee2e6;
+	padding: 8px 12px;
+	margin-bottom: 6px;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	gap: 8px; /* Space between icon and text */
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.file-icon {
+	width: 20px; /* Icon width */
+	height: 20px; /* Icon height */
+	flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+#existingFiles li a {
+	text-decoration: none;
+	color: #495057; /* Link color adjusted */
+	font-weight: 500;
+	flex-grow: 1;
+}
+
+#existingFiles li a:hover {
+	text-decoration: underline;
+}
+
+.file-size {
+	color: #6c757d;
+	font-size: 0.8em;
+	white-space: nowrap;
+}
+
+.no-existing-files-message {
+	color: #6c757d;
+	font-style: italic;
+	padding: 5px 0;
+	font-size: 0.9em;
+}
+
+/* --- Styles for File Delete Button (New additions) --- */
+.remove-file-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	margin-left: 10px; /* 파일 이름과의 간격 */
+	flex-shrink: 0;
+	opacity: 0.7;
+	transition: opacity 0.2s ease;
+}
+
+.remove-file-button:hover {
+	opacity: 1;
+}
+
+.remove-file-button img.delete-icon {
+	width: 18px; /* 삭제 아이콘 크기 */
+	height: 18px;
+	vertical-align: middle;
 }
