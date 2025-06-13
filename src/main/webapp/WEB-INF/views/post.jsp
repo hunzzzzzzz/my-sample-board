@@ -108,12 +108,12 @@ h1 {
 
 /* 좋아요가 눌러진 상태의 하트 색상 */
 .like-icon.liked {
-    fill: #dc3545; /* 빨간색 채우기 */
+	fill: #dc3545; /* 빨간색 채우기 */
 }
 
 /* 좋아요가 눌러지지 않은 상태의 하트 색상 */
 .like-icon.unliked {
-    fill: #ccc; /* 회색 비움 */
+	fill: #ccc; /* 회색 비움 */
 }
 
 .like-count {
@@ -279,14 +279,16 @@ h1 {
 
 		<div class="post-content">${post.content}</div>
 
-        <%-- ⭐ 좋아요 섹션 추가 시작 ⭐ --%>
+		<%-- ⭐ 좋아요 섹션 추가 시작 ⭐ --%>
 		<div class="like-section">
 			<button type="button" id="likeButton" class="like-button">
-				<img src="/icons/heart.svg" alt="좋아요" class="like-icon" id="heartIcon">
+				<img src="/icons/empty-heart.svg" alt="좋아요" class="like-icon"
+					id="heartIcon">
+				<%-- 초기 아이콘은 비어있는 하트 --%>
 				<span id="likeCountDisplay">${post.likeCount}</span>
 			</button>
 		</div>
-        <%-- ⭐ 좋아요 섹션 추가 끝 ⭐ --%>
+		<%-- ⭐ 좋아요 섹션 추가 끝 ⭐ --%>
 
 		<div class="file-list-group">
 			<label>첨부 파일</label>
@@ -392,6 +394,19 @@ h1 {
             } catch (error) {
                 console.error('좋아요 상태 API 호출 중 오류 발생:', error);
                 displayDynamicMessage('네트워크 오류로 좋아요 상태를 불러올 수 없습니다.', 'error');
+            }
+        }
+        
+     // 좋아요 버튼 UI 업데이트 함수
+        function updateLikeButtonUI() {
+            if (isLiked) {
+                heartIcon.src = "/icons/heart.svg"; // 좋아요 눌렀을 때 채워진 하트
+                heartIcon.classList.add('liked'); // 기존 클래스도 유지 가능
+                heartIcon.classList.remove('unliked');
+            } else {
+                heartIcon.src = "/icons/empty-heart.svg"; // 좋아요 안 눌렀을 때 비어있는 하트
+                heartIcon.classList.add('unliked'); // 기존 클래스도 유지 가능
+                heartIcon.classList.remove('liked');
             }
         }
 

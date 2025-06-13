@@ -17,6 +17,12 @@ public class PostUpdateService {
 	private final FileSaveService fileSaveService;
 	private final PostMapper postMapper;
 
+	/**
+	 * 특정 게시글의 정보를 업데이트하는 메서드
+	 *
+	 * @param postId  수정할 게시글의 고유 ID.
+	 * @param request 게시글 수정 요청 데이터 (제목, 내용, 작성자, 새로운 파일 목록, 삭제할 파일 ID 목록)
+	 */
 	@Transactional
 	public void update(long postId, PostUpdateRequest request) {
 		// 게시글 기본 정보 수정

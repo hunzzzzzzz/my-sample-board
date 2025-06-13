@@ -28,7 +28,7 @@ public class PostAddController {
 	 * 새로운 게시글을 등록하는 폼 페이지를 반환하는 메서드
 	 *
 	 * @param model 뷰로 데이터를 전달하는 데 사용되는 Spring UI Model
-	 * @return 게시글 등록/수정 폼의 뷰 이름 ("post-form")
+	 * @return      게시글 등록/수정 폼의 뷰 이름 ("post-form")
 	 */
 	@GetMapping("/posts/register")
 	String showPostForm(Model model) {
@@ -42,7 +42,7 @@ public class PostAddController {
 	 *
 	 * @param request       클라이언트로부터 받은 게시글 등록 데이터 (제목, 내용, 작성자, 파일 등)
 	 * @param bindingResult 요청 데이터 유효성 검사 결과를 담는 객체
-	 * @return 처리 결과에 따른 HTTP 응답 (성공 시 201 Created, 실패 시 400 Bad Request)
+	 * @return              처리 결과에 따른 HTTP 응답 (성공 시 201 Created, 실패 시 400 Bad Request)
 	 */
 	@PostMapping("/posts")
 	ResponseEntity<?> add(@Valid @ModelAttribute PostAddRequest request, BindingResult bindingResult) {

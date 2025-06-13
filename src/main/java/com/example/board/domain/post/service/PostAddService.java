@@ -19,7 +19,7 @@ public class PostAddService {
 	/**
 	 * 새로운 게시글과 해당 첨부 파일을 저장하는 메서드
 	 *
-	 * @param request 게시글 등록 요청 데이터 (제목, 내용, 작성자, 첨부 파일 목록 포함)
+	 * @param request 게시글 등록 요청 데이터 (제목, 내용, 작성자, 첨부 파일 목록)
 	 */
 	@Transactional
 	public void add(PostAddRequest request) {

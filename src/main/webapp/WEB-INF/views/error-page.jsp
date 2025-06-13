@@ -97,9 +97,9 @@ h1 {
 <body>
 	<div class="error-container">
 		<h1>
-			<span class="error-code">${statusCode}</span> ${errorTitle}
+			<span class="error-code">${error.errorPageStatusCode()}</span> ${error.errorPageTitle()}
 		</h1>
-		<p class="error-message">${errorMessage}</p>
+		<p class="error-message">${error.message()}</p>
 		<button class="back-button" onclick="window.history.back()">뒤로가기</button>
 		<a href="/" class="home-button">메인 페이지로</a>
 	</div>

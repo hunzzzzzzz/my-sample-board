@@ -73,6 +73,11 @@ public class PostGetService {
 		return post;
 	}
 	
+	/**
+	 * 특정 ID에 해당하는 게시글의 수정 시 필요한 상세 정보를 조회하는 메서드
+	 * @param postId 조회할 게시글의 고유 ID
+	 * @return       수정 시 필요한 게시글의 상세 정보가 담긴 객체
+	 */
 	@Transactional(readOnly = true)
 	public PostFormResponse get(long postId) {
 		return postMapper.getWhenUpdate(postId);

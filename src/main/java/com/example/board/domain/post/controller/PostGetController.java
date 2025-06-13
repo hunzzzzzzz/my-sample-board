@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.board.domain.post.dto.response.PostDetailResponse;
 import com.example.board.domain.post.service.PostGetService;
-import com.example.board.global.exception.post.PostAccessException;
-import com.example.board.global.exception.post.PostNotFoundException;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,43 +54,26 @@ public class PostGetController {
 	}
 
 	/**
-	 * 특정 게시글의 상세 페이지를 조회하는 메서드 조회수 증가 로직을 포함하며, 쿠키를 사용하여 중복 조회를 방지한다.
+	 * 특정 게시글의 상세 정보를 조회하고 뷰에 전달하는 메서드
+     * '게시글 조회 시 조회수 증가' 로직과 '중복 조회 방지를 위한 쿠키 검증' 로직을 포함
 	 *
 	 * @param model    뷰로 데이터를 전달하는 데 사용되는 Spring UI Model
 	 * @param postId   조회할 게시글의 고유 ID
 	 * @param request  요청 헤더의 쿠키를 가져오는 데 사용되는 HttpServletRequest 객체
 	 * @param response 쿠키를 추가하는 데 사용되는 HttpServletResponse 객체
-	 * @return 게시글 상세 페이지의 뷰 이름 ("post") 또는 에러 페이지의 뷰 이름 ("error-page")
+	 * @return 게시글 상세 페이지의 뷰 이름 ("post")
 	 */
 	@GetMapping("/posts/{postId}")
 	String get(Model model, @PathVariable long postId, HttpServletRequest request, HttpServletResponse response) {
-		try {
-			// 쿠키 존재 여부 확인
-			boolean hasCookieOfPostView = hasCookieOfPostView(postId, request);
-			// 쿠키가 없다면 추가
-			if (!hasCookieOfPostView)
-				addCookie(postId, response);
+		// 쿠키 존재 여부 확인
+		boolean hasCookieOfPostView = hasCookieOfPostView(postId, request);
+		// 쿠키가 없다면 추가
+		if (!hasCookieOfPostView)
+			addCookie(postId, response);
 
-			PostDetailResponse post = postGetService.get(postId, !hasCookieOfPostView);
-			model.addAttribute("post", post);
+		PostDetailResponse post = postGetService.get(postId, !hasCookieOfPostView);
+		model.addAttribute("post", post);
 
-			return "post";
-		}
-		// 사용자가 '존재하지 않는 게시글'에 접근하는 경우
-		catch (PostNotFoundException e) {
-			model.addAttribute("statusCode", e.statusCode);
-			model.addAttribute("errorTitle", "페이지를 찾을 수 없습니다.");
-			model.addAttribute("errorMessage", e.message);
-
-			return "error-page";
-		}
-		// 사용자가 '삭제된 게시글'에 접근하는 경우
-		catch (PostAccessException e) {
-			model.addAttribute("statusCode", e.statusCode);
-			model.addAttribute("errorTitle", "접근 권한이 없습니다.");
-			model.addAttribute("errorMessage", e.message);
-
-			return "error-page";
-		}
+		return "post";
 	}
 }

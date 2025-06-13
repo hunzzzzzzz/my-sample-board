@@ -17,6 +17,12 @@ public class PostDeleteController {
 
 	private static final String SUCCESS_MESSAGE = "게시글이 성공적으로 삭제되었습니다!";
 
+	/**
+	 * 특정 게시글을 삭제하는 요청을 처리하는 메서드
+	 * 
+	 * @param postId  삭제할 게시글의 고유 ID (경로 변수 {@code /{postId}}에서 추출).
+	 * @return        처리 결과에 따른 HTTP 응답 (성공 시 200 OK)
+	 */
 	@DeleteMapping("/posts/{postId}")
 	ResponseEntity<SuccessResponse> delete(@PathVariable long postId) {
 		postDeleteService.delete(postId);

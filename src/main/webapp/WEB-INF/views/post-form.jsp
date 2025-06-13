@@ -132,7 +132,7 @@
 
 			<!-- 버튼 목록 -->
 			<div class="button-group">
-				<button type="button" class="cancel-button" onclick="location.href='/posts/${post.postId}'">취소</button>
+				<button type="button" class="cancel-button" id="cancelButton">취소</button>
 				<button type="submit" class="submit-button">
 					<c:if test="${isEditMode}">수정 완료</c:if>
 					<c:if test="${not isEditMode}">등록</c:if>
@@ -145,6 +145,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const postForm = document.getElementById('postForm');
             const isEditMode = ${isEditMode};
+            const postId = ${isEditMode ? post.postId : 0};
             
             const deletedFileUuids = [];
             const deletedFileIdsInput = document.getElementById('deletedFileIds');
@@ -152,6 +153,20 @@
             // 페이지 로드 시 ,기존의 서버 메시지 제거
             clearErrors();
             clearServerMessage();
+            
+            // 취소 버튼 클릭 시 이동할 경로를 결정
+            let redirectPath;
+            if (isEditMode)
+            	redirectPath = '/posts/' + postId;
+            else
+            	redirectPath = '/posts';
+            
+            const cancelButton = document.getElementById('cancelButton');
+            if (cancelButton) {
+            	cancelButton.addEventListener('click', function() {
+            		location.href = redirectPath;
+            	});
+            }
 
             // 수정 모드인 경우, '기존 첨부파일 삭제 버튼' 이벤트 추가
             if (isEditMode) {
