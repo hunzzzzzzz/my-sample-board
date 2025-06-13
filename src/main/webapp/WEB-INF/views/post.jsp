@@ -69,6 +69,59 @@ h1 {
 	word-wrap: break-word;
 }
 
+.like-section {
+	display: flex;
+	align-items: center;
+	justify-content: center; /* 가운데 정렬 */
+	gap: 10px; /* 아이콘과 텍스트 사이 간격 */
+	margin-top: 20px;
+	margin-bottom: 20px;
+	padding: 15px 0;
+	border-top: 1px solid #e9ecef;
+	border-bottom: 1px solid #e9ecef;
+	background-color: #fcfcfc;
+	border-radius: 8px;
+}
+
+.like-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	font-size: 1.2em;
+	color: #dc3545; /* 하트 색상 (빨간색) */
+	transition: transform 0.2s ease;
+}
+
+.like-button:hover {
+	transform: scale(1.1);
+}
+
+.like-icon {
+	width: 28px; /* 아이콘 크기 조정 */
+	height: 28px;
+	margin-right: 5px;
+	transition: fill 0.2s ease;
+}
+
+/* 좋아요가 눌러진 상태의 하트 색상 */
+.like-icon.liked {
+    fill: #dc3545; /* 빨간색 채우기 */
+}
+
+/* 좋아요가 눌러지지 않은 상태의 하트 색상 */
+.like-icon.unliked {
+    fill: #ccc; /* 회색 비움 */
+}
+
+.like-count {
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #333;
+}
+
 .file-list-group {
 	margin-top: 30px;
 	padding-top: 20px;
@@ -226,6 +279,15 @@ h1 {
 
 		<div class="post-content">${post.content}</div>
 
+        <%-- ⭐ 좋아요 섹션 추가 시작 ⭐ --%>
+		<div class="like-section">
+			<button type="button" id="likeButton" class="like-button">
+				<img src="/icons/heart.svg" alt="좋아요" class="like-icon" id="heartIcon">
+				<span id="likeCountDisplay">${post.likeCount}</span>
+			</button>
+		</div>
+        <%-- ⭐ 좋아요 섹션 추가 끝 ⭐ --%>
+
 		<div class="file-list-group">
 			<label>첨부 파일</label>
 			<div id="attachedFiles">
@@ -297,6 +359,93 @@ h1 {
 	</div>
 
 	<script>
+        const currentPostId = ${post.postId};
+        let isLiked = false; // 현재 사용자의 좋아요 상태 (서버에서 받아옴)
+        const heartIcon = document.getElementById('heartIcon');
+        const likeCountDisplay = document.getElementById('likeCountDisplay');
+        const likeButton = document.getElementById('likeButton');
+
+        // 좋아요 버튼 UI 업데이트 함수
+        function updateLikeButtonUI() {
+            if (isLiked) {
+                heartIcon.classList.add('liked');
+                heartIcon.classList.remove('unliked');
+            } else {
+                heartIcon.classList.add('unliked');
+                heartIcon.classList.remove('liked');
+            }
+        }
+
+        // 페이지 로드 시 현재 사용자의 좋아요 상태를 서버에서 확인
+        async function checkInitialLikeStatus() {
+            try {
+                const response = await fetch('/posts/' + currentPostId + '/like/check');
+                const result = await response.json(); // SuccessResponse 파싱
+
+                if (response.ok) {
+                    isLiked = result.value; // SuccessResponse의 두번째 값(value)이 boolean hasLike
+                    updateLikeButtonUI(); // UI 업데이트
+                } else {
+                    console.error('좋아요 상태를 가져오는 데 실패했습니다:', result.message);
+                    displayDynamicMessage('좋아요 상태를 불러오는 데 실패했습니다.', 'error');
+                }
+            } catch (error) {
+                console.error('좋아요 상태 API 호출 중 오류 발생:', error);
+                displayDynamicMessage('네트워크 오류로 좋아요 상태를 불러올 수 없습니다.', 'error');
+            }
+        }
+
+        // 좋아요 토글 기능
+        likeButton.addEventListener('click', async () => {
+            try {
+                let url = '/posts/' + currentPostId + '/like';
+                let method;
+
+                if (isLiked) {
+                    method = 'DELETE'; // 좋아요 취소
+                } else {
+                    method = 'POST'; // 좋아요 추가
+                }
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                    // POST/DELETE 요청이지만, 현재 컨트롤러는 @RequestBody를 사용하지 않으므로 body는 비워둡니다.
+                    // 만약 나중에 userId를 함께 보내야 한다면 body에 JSON.stringify({ userId: '...' }) 추가
+                });
+
+                const result = await response.json(); // SuccessResponse 파싱
+
+                if (response.ok) {
+                    isLiked = !isLiked; // 좋아요 상태 토글
+                    updateLikeButtonUI(); // UI 업데이트
+
+                    // 좋아요 개수 업데이트 (서버에서 최신 좋아요 개수를 받아오는 것이 가장 정확)
+                    // 현재 컨트롤러는 업데이트된 좋아요 수를 반환하지 않으므로, 클라이언트에서만 1 증가/감소시킵니다.
+                    let currentLikeCount = parseInt(likeCountDisplay.textContent);
+                    if (isLiked) {
+                        likeCountDisplay.textContent = currentLikeCount + 1;
+                        displayDynamicMessage(result.message, 'success');
+                    } else {
+                        likeCountDisplay.textContent = currentLikeCount - 1;
+                        displayDynamicMessage(result.message, 'success');
+                    }
+                } else {
+                    displayDynamicMessage(result.message || '좋아요 처리 중 오류가 발생했습니다.', 'error');
+                    console.error('좋아요 처리 실패:', result);
+                }
+            } catch (error) {
+                console.error('좋아요 토글 오류:', error);
+                displayDynamicMessage('네트워크 오류 또는 서버 응답 처리 중 문제가 발생했습니다.', 'error');
+            }
+        });
+
+        // 페이지 로드 시 초기 좋아요 상태 확인 함수 호출
+        document.addEventListener('DOMContentLoaded', checkInitialLikeStatus);
+
+
         // JavaScript로 동적으로 메시지를 표시하는 함수
         function displayDynamicMessage(message, type) {
             const dynamicMessageDiv = document.getElementById('dynamicMessage');
@@ -338,7 +487,7 @@ h1 {
                         }, 1500);
                     } else {
                         // 응답이 에러(4xx, 5xx 등)인 경우
-                        // result.message에서 서버가 보낸 에러 메시지(ErrorResponse)를 가져와 표시
+                        // result.message에서 서버가 보낸 에러 메시지를 가져와 표시
                         displayDynamicMessage(result.message || '게시글 삭제에 실패했습니다. 알 수 없는 오류.', 'error');
                         // 필요에 따라 더 상세한 에러 처리 (예: console.error(result.errors))
                     }

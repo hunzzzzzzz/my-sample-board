@@ -24,11 +24,16 @@ public class FileController {
 	@GetMapping("/files/{fileId}")
 	ResponseEntity<Resource> download(@PathVariable UUID fileId) {
 		FileDownloadResponse file = fileDownloadService.download(fileId);
-		String encodedFileName = new String(file.getOriginalFileName().getBytes(StandardCharsets.UTF_8),
-				StandardCharsets.ISO_8859_1);
+		
+		String encodedFileName = new String(
+				file.getOriginalFileName().getBytes(StandardCharsets.UTF_8),
+				StandardCharsets.ISO_8859_1
+		);
 
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType(file.getFileType())) // 파일 타입 (MIME Type) 설정
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"") // 다운로드 헤더
+		return ResponseEntity
+				.ok()
+				.contentType(MediaType.parseMediaType(file.getFileType()))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
 				.body(file.getResource());
 	}
 }

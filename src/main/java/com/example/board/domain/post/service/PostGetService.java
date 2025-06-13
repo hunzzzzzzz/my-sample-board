@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.board.domain.post.dto.response.PostDetailResponse;
+import com.example.board.domain.post.dto.response.PostFormResponse;
 import com.example.board.domain.post.entity.PostStatus;
 import com.example.board.domain.post.mapper.PostMapper;
 import com.example.board.global.component.TimeFormatter;
@@ -70,5 +71,10 @@ public class PostGetService {
 			postMapper.incrementViewCount(postId);
 
 		return post;
+	}
+	
+	@Transactional(readOnly = true)
+	public PostFormResponse get(long postId) {
+		return postMapper.getWhenUpdate(postId);
 	}
 }

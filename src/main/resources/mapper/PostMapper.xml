@@ -33,6 +33,14 @@
 		<result property="isUpdated" column="is_updated" /> 
 		<collection property="files" javaType="java.util.ArrayList" resultMap="fileResponseMap" />
 	</resultMap>
+	
+	<resultMap id="postFormResponse" type="com.example.board.domain.post.dto.response.PostFormResponse">
+		<id property="postId" column="id" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="author" column="author" />
+		<collection property="files" javaType="java.util.ArrayList" resultMap="fileResponseMap" />
+	</resultMap>
 
 	<select id="getAll" resultMap="postResponse">
 		SELECT * FROM (
@@ -54,6 +62,9 @@
 	                    </when>
 	                    <when test="sort != null and sort.name() == 'MOST_VIEWED'">
 	                        ORDER BY view_count DESC
+	                    </when>
+	                    <when test="sort != null and sort.name() == 'MOST_LIKED'">
+	                        ORDER BY like_count DESC
 	                    </when>
 						<otherwise>
 							ORDER BY id DESC
@@ -106,6 +117,24 @@
 		LEFT JOIN
 			t_board_file f ON p.id = f.post_id
 		WHERE 
+			p.id=#{postId}
+	</select>
+	
+	<select id="getWhenUpdate" resultMap="postFormResponse">
+		SELECT 
+			p.id, 
+			p.title, 
+			p.content,
+			p.author,
+			f.id AS file_id,
+			f.original_file_name,
+			f.file_size,
+			f.file_type
+		FROM 
+			t_board_post p
+		LEFT JOIN
+			t_board_file f ON p.id = f.post_id
+		WHERE
 			p.id=#{postId}
 	</select>
 	

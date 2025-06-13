@@ -23,9 +23,9 @@ public class PostAddRequest {
 	@Size(max = 10, message = "작성자 이름은 10자를 초과할 수 없습니다.")
 	String author;
 
+	private List<MultipartFile> files;
+
 	public Post toEntity() {
 		return new Post(title, content, author);
 	}
-
-	private List<MultipartFile> files;
 }

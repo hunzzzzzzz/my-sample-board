@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 import com.example.board.domain.post.entity.PostStatus;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PostResponse {
 	private long postId;
 	private PostStatus status;

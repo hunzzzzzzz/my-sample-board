@@ -15,9 +15,9 @@ CREATE TABLE t_board_like
 (
    id NUMBER PRIMARY KEY,
    post_id NUMBER NOT NULL,
-   user_id NUMBER NOT NULL,
+   user_id VARCHAR2 (36) NOT NULL,
    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
    
-   CONSTRAINT fk_like_post FOREIGN KEY (post_id) REFERENCES t_board_post (id) ON DELETE CASCADE
+   CONSTRAINT fk_like_post FOREIGN KEY (post_id) REFERENCES t_board_post (id) ON DELETE CASCADE,
    CONSTRAINT fk_like_user FOREIGN KEY (user_id) REFERENCES t_board_user (id) ON DELETE CASCADE
 );

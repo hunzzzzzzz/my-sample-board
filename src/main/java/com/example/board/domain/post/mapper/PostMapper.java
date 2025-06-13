@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.example.board.domain.post.dto.request.PostUpdateRequest;
 import com.example.board.domain.post.dto.response.PostDetailResponse;
+import com.example.board.domain.post.dto.response.PostFormResponse;
 import com.example.board.domain.post.dto.response.PostResponse;
 import com.example.board.domain.post.entity.Post;
 import com.example.board.domain.post.entity.SortCondition;
@@ -17,6 +18,8 @@ public interface PostMapper {
 	List<PostResponse> getAll(int pageSize, int offset, String keyword, SortCondition sort);
 
 	PostDetailResponse get(long postId);
+	
+	PostFormResponse getWhenUpdate(long postId);
 
 	void add(Post post);
 

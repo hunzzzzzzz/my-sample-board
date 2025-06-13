@@ -1,4 +1,3 @@
-/* posts.css */
 body {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	margin: 0;
@@ -31,7 +30,7 @@ body {
 
 .container {
 	width: 90%;
-	max-width: 1000px; /* 게시판 전체 최대 너비 */
+	max-width: 1000px;
 	background-color: #ffffff;
 	padding: 30px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -128,25 +127,27 @@ table {
 	overflow: hidden;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	box-sizing: border-box;
-	table-layout: fixed; /* 테이블 레이아웃을 고정하여 colgroup 너비 적용 */
+	table-layout: fixed;
 }
 
-/* colgroup을 통해 각 컬럼의 초기 너비 설정 */
 table colgroup col:nth-child(1) {
 	width: 50px;
-} /* ID */
+}
 table colgroup col:nth-child(2) {
-	width: 50%;
-} /* 제목 */
+	width: 40%;
+}
 table colgroup col:nth-child(3) {
 	width: 125px;
-} /* ⭐ 작성자 - 너비 조정됨 (120px) ⭐ */
+}
 table colgroup col:nth-child(4) {
 	width: 100px;
-} /* 조회수 */
+}
 table colgroup col:nth-child(5) {
+	width: 100px;
+}
+table colgroup col:nth-child(6) {
 	width: 120px;
-} /* 작성일 */
+}
 
 table thead tr {
 	background-color: #f8f9fa;
@@ -154,26 +155,25 @@ table thead tr {
 }
 
 table th, table td {
-	padding: 10px; /* 패딩을 약간 줄여서 텍스트 공간 확보 */
+	padding: 10px;
 	text-align: left;
 	border-bottom: 1px solid #dee2e6;
 	vertical-align: middle;
 }
 
-/* 조회수 헤더 (<th>)에 직접 스타일 적용 */
-table thead th:nth-child(4) {
-	white-space: nowrap; /* 줄바꿈 방지 */
-	min-width: 80px; /* 최소 너비 보장 */
-	text-align: center; /* 텍스트 중앙 정렬 */
+.centered-header {
+	white-space: nowrap;
+	min-width: 80px;
+	text-align: center;
 }
 
-/* 조회수 데이터 셀 (<td>)에 직접 스타일 적용 */
-table tbody td:nth-child(4) {
-	white-space: nowrap; /* 줄바꿈 방지 */
-	min-width: 80px; /* 최소 너비 보장 */
-	overflow: hidden; /* 넘치는 내용 숨기기 */
-	text-overflow: ellipsis; /* ... 표시 (조회수는 거의 필요 없겠지만 혹시 몰라 추가) */
-	text-align: center; /* 텍스트 중앙 정렬 */
+table tbody td:nth-child(4),
+table tbody td:nth-child(5) {
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	min-width: 80px;
 }
 
 table th {
@@ -182,7 +182,6 @@ table th {
 	font-size: 1.05em;
 }
 
-/* 게시글 제목 컬럼 (두 번째 td)의 텍스트 오버플로우 처리 */
 table tbody td:nth-child(2) {
 	white-space: nowrap;
 	overflow: hidden;
@@ -230,7 +229,6 @@ table tbody tr:last-child td {
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 10;
-	margin-top: 0;
 }
 
 .pagination a {
@@ -267,7 +265,6 @@ table tbody tr:last-child td {
 	bottom: 25px;
 	right: 30px;
 	z-index: 10;
-	margin-top: 0;
 }
 
 .register-button {

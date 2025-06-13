@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.example.board.domain.post.dto.request.PostUpdateRequest;
-import com.example.board.domain.post.dto.response.PostDetailResponse;
+import com.example.board.domain.post.dto.response.PostFormResponse;
 import com.example.board.domain.post.service.PostGetService;
 import com.example.board.domain.post.service.PostUpdateService;
 import com.example.board.global.dto.ErrorResponse;
@@ -34,9 +34,8 @@ public class PostUpdateController {
 	@GetMapping("/posts/edit/{postId}")
 	String showEditForm(Model model, @PathVariable long postId) {
 		// postId를 활용해서 기존 게시글 정보 조회
-		PostDetailResponse post = postGetService.get(postId, false);
+		PostFormResponse post = postGetService.get(postId);
 
-		model.addAttribute("postId", postId);
 		model.addAttribute("post", post);
 		model.addAttribute("isEditMode", true);
 
