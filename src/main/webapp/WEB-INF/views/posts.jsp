@@ -47,7 +47,7 @@
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th>제목</th>
+					<th id="title-header">제목</th>
 					<th>작성자</th>
 					<th class="centered-header">조회수</th>
 					<th class="centered-header">좋아요</th>
@@ -113,6 +113,43 @@
 			const url = '/posts?page=1&keyword=' + keyword + '&sort=' + sort;
 			window.location.href = url;
 		}
+		
+		// 어드민 페이지로 이동하기 위한 조건
+		let adminClickCount = 0;
+		let adminClickTimer = null; // 클릭 간격 타이머 ID 저장
+		const TITLE_CLICK_THRESHOLD = 5; // 어드민 페이지로 이동하기 위한 클릭 횟수
+		const CLICK_INTERVAL_MS = 1000; // 연속 클릭으로 인정되는 최대 시간 간격 (1초)
+
+		// '제목' 헤더를 클릭한 경우
+		document.addEventListener('DOMContentLoaded', function() {
+			const titleHeader = document.getElementById('title-header');
+
+			if (titleHeader) {
+				titleHeader.addEventListener('click', function(event) {
+					event.preventDefault(); 
+
+					// 클릭 횟수 증가
+					adminClickCount++; 
+
+					// 기존 타이머가 있다면 초기화 (새로운 클릭이 발생했으므로)
+					clearTimeout(adminClickTimer);
+
+					// 일정 시간(1초) 내에 다음 클릭이 없으면 횟수 초기화
+					adminClickTimer = setTimeout(() => {
+						adminClickCount = 0; 
+					}, CLICK_INTERVAL_MS);
+
+					// 5번을 클릭한 경우
+					if (adminClickCount === TITLE_CLICK_THRESHOLD) {
+						clearTimeout(adminClickTimer); // 타이머 초기화
+						adminClickCount = 0; // 횟수 초기화
+
+						alert("관리자 페이지로 이동합니다.");
+						window.location.href = '/admin'; // 관리자 페이지로 이동
+					}
+				});
+			}
+		});
 	</script>
 </body>
 </html>

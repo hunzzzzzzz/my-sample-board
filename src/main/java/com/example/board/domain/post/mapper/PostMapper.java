@@ -20,6 +20,8 @@ public interface PostMapper {
 	PostDetailResponse get(long postId);
 	
 	PostFormResponse getWhenUpdate(long postId);
+	
+	List<PostResponse> getAllDeleted();
 
 	void add(Post post);
 

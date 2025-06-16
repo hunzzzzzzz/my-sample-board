@@ -22,7 +22,7 @@ public class UserListService {
 	@Transactional(readOnly = true)
 	public List<UserResponse> getAll() {
 		List<User> users = userMapper.getAll();
-
+		
 		return users.stream()
 				.map((user) -> user.toResponse(timeFormatter))
 				.collect(Collectors.toList());

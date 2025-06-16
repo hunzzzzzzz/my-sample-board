@@ -138,6 +138,12 @@
 			p.id=#{postId}
 	</select>
 	
+	<select id="getAllDeleted" resultMap="postResponse">
+		SELECT id, status, title, author, view_count, like_count, created_at
+		FROM t_board_post
+		WHERE status = 'DELETED'
+	</select>
+	
 	<update id="update">
 		UPDATE t_board_post
 		SET

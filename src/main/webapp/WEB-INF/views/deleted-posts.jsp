@@ -4,11 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>유저 목록</title>
+<title>삭제 게시글 목록</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-quartz.css">
 <style>
-#userGrid {
+#deletedPostGrid {
 	height: 600px;
 	width: 100%;
 }
@@ -114,9 +114,9 @@ h1 {
 	</nav>
 
 	<div class="container">
-		<h1>전체 유저 목록</h1>
+		<h1>전체 삭제 게시글 목록</h1>
 
-		<div id="userGrid" class="ag-theme-quartz"></div>
+		<div id="deletedPostGrid" class="ag-theme-quartz"></div>
 
 		<button id="goToHome" class="home-button">홈으로</button>
 	</div>
@@ -127,17 +127,16 @@ h1 {
 	<script>
 		// ***** 그리드 정의 *****
         document.addEventListener('DOMContentLoaded', function() {
-            const gridDiv = document.querySelector('#userGrid');
+            const gridDiv = document.querySelector('#deletedPostGrid');
 
             // 컬럼 정의
             const columnDefs = [
-                { headerName: "ID", field: "userId", sortable: false, filter: true, width: 300 },
-                { headerName: "이메일", field: "email", sortable: true, filter: true, width: 200 },
-                { headerName: "이름", field: "name", sortable: true, filter: true, width: 150 },
-                { headerName: "가입일", field: "createdAt", sortable: true, filter: true, width: 200 },
-                { headerName: "수정일", field: "updatedAt", sortable: false, filter: true, width: 200 },
-                { headerName: "마지막 로그인", field: "lastLoginAt", sortable: false, filter: true, width: 200 },
-                { headerName: "접속 여부", field: "isLoginNow", sortable: true, filter: true, width: 150 },
+                { headerName: "ID", field: "postId", sortable: true, filter: true, width: 150 },
+                { headerName: "제목", field: "title", sortable: true, filter: true, width: 400 },
+                { headerName: "작성자", field: "author", sortable: true, filter: true, width: 200 },
+                { headerName: "조회수", field: "viewCount", sortable: true, filter: true, width: 150 },
+                { headerName: "좋아요수", field: "likeCount", sortable: true, filter: true, width: 150 },
+                { headerName: "작성일", field: "formattedCreatedAt", sortable: false, filter: true, width: 200 }
             ];
 
             // 그리드 옵션 설정
@@ -153,7 +152,7 @@ h1 {
             const gridApi = agGrid.createGrid(gridDiv, gridOptions);
 
             // API 호출
-            fetch('/api/admin/users')
+            fetch('/api/admin/posts/deleted')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -165,8 +164,8 @@ h1 {
                     gridApi.setGridOption('rowData', rowData);
                 })
                 .catch(error => {
-                    console.error('Error fetching user data:', error);
-                    alert('유저 목록을 불러오는 데 실패했습니다.');
+                    console.error('Error fetching deleted post data:', error);
+                    alert('삭제된 게시글 목록을 불러오는 데 실패했습니다.');
                 });
         });
 		
@@ -179,7 +178,7 @@ h1 {
         	let uri = link.getAttribute('href') // href에 포함된 URI
         	
             if (currentPath === '/admin' && uri === '/admin/users') {
-                link.classList.add('active'); // 해당 링크에 active 속성 추가
+                link.classList.add('active'); // 어드민 페이지의 디폴트 내비게이션 = 유저 목록
             } else if (uri === currentPath) {
                 link.classList.add('active'); // 해당 링크에 active 속성 추가
             } else {

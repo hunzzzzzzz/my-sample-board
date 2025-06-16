@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 public class UserController {
 	private final UserListService userListService;
 
-	@GetMapping("/admin/users")
+	@GetMapping({"/admin", "/admin/users"})
 	String showUserListPage() {
 		return "users";
 	}

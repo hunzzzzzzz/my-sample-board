@@ -7,14 +7,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Builder
-public record ErrorResponse(
-		String message, 
-		Map<String, String> errors,
-		String errorPageTitle,
-		int errorPageStatusCode
-) {
+@Getter
+@Setter
+public class ErrorResponse {
+	private String message;
+	private Map<String, String> errors;
+	private String errorPageTitle;
+	private int errorPageStatusCode;
+	
 	public static ErrorResponse of(String message, BindingResult bindingResult) {
 		Map<String, String> errors = bindingResult.getFieldErrors().stream()
 				.collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));

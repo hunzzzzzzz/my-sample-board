@@ -15,6 +15,7 @@ public class User {
 	private UUID userId;
 	private String email;
 	private String name;
+	private String password;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
 	
