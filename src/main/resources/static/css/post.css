@@ -1,0 +1,246 @@
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	min-height: 100vh;
+	margin: 0;
+	background-color: #f0f2f5;
+	color: #333;
+}
+
+.container {
+	width: 90%;
+	max-width: 900px;
+	background-color: #ffffff;
+	padding: 40px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	border-radius: 10px;
+	margin-top: 60px;
+	box-sizing: border-box;
+}
+
+h1 {
+	text-align: center;
+	color: #2c3e50;
+	margin-bottom: 30px;
+	font-size: 2.5em;
+	font-weight: 700;
+	border-bottom: 2px solid #e0e0e0;
+	padding-bottom: 15px;
+}
+
+.post-info {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 25px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #e9ecef;
+	color: #6c757d;
+	font-size: 0.95em;
+}
+
+.post-info span {
+	margin-right: 20px;
+}
+
+.post-content {
+	background-color: #f8f9fa;
+	border: 1px solid #dee2e6;
+	border-radius: 8px;
+	padding: 25px;
+	margin-bottom: 30px;
+	line-height: 1.8;
+	color: #495057;
+	min-height: 200px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+.like-section {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	padding: 15px 0;
+	border-top: 1px solid #e9ecef;
+	border-bottom: 1px solid #e9ecef;
+	background-color: #fcfcfc;
+	border-radius: 8px;
+}
+
+.like-button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	font-size: 1.2em;
+	color: #dc3545;
+	transition: transform 0.2s ease;
+}
+
+.like-button:hover {
+	transform: scale(1.1);
+}
+
+.like-icon {
+	width: 28px;
+	height: 28px;
+	margin-right: 5px;
+	transition: fill 0.2s ease;
+}
+
+.like-icon.liked {
+	fill: #dc3545;
+}
+
+.like-icon.unliked {
+	fill: #ccc;
+}
+
+.like-count {
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #333;
+}
+
+.file-list-group {
+	margin-top: 30px;
+	padding-top: 20px;
+	border-top: 1px solid #e9ecef;
+}
+
+.file-list-group label {
+	font-weight: bold;
+	color: #2c3e50;
+	margin-bottom: 15px;
+	display: block;
+	font-size: 1.1em;
+}
+
+#attachedFiles ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+#attachedFiles li {
+	background-color: #f0f0f0;
+	border: 1px solid #e0e0e0;
+	padding: 10px 15px;
+	margin-bottom: 8px;
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.file-icon {
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
+}
+
+#attachedFiles li a {
+	text-decoration: none;
+	color: #007bff;
+	font-weight: 600;
+	flex-grow: 1;
+}
+
+#attachedFiles li a:hover {
+	text-decoration: underline;
+}
+
+.file-size {
+	color: #6c757d;
+	font-size: 0.85em;
+	white-space: nowrap;
+}
+
+.no-files-message {
+	color: #6c757d;
+	font-style: italic;
+	padding: 10px 0;
+}
+
+.button-group {
+	text-align: center;
+	margin-top: 30px;
+}
+
+.action-button {
+	display: inline-block;
+	padding: 12px 25px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	text-decoration: none;
+	font-size: 1em;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	margin: 0 8px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-button {
+	background-color: #007bff;
+	color: white;
+}
+
+.edit-button:hover {
+	background-color: #0056b3;
+	transform: translateY(-2px);
+}
+
+.delete-button {
+	background-color: #dc3545;
+	color: white;
+}
+
+.delete-button:hover {
+	background-color: #c82333;
+	transform: translateY(-2px);
+}
+
+.back-button {
+	background-color: #6c757d;
+	color: white;
+}
+
+.back-button:hover {
+	background-color: #5a6268;
+	transform: translateY(-2px);
+}
+
+.message-success {
+	color: #155724;
+	background-color: #d4edda;
+	border: 1px solid #c3e6cb;
+	padding: 12px 20px;
+	margin-bottom: 25px;
+	border-radius: 6px;
+	text-align: center;
+	font-weight: 500;
+	font-size: 0.95em;
+	display: block;
+}
+
+.message-error {
+	color: #721c24;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	padding: 12px 20px;
+	margin-bottom: 25px;
+	border-radius: 6px;
+	text-align: center;
+	font-weight: 500;
+	font-size: 0.95em;
+	display: block;
+}

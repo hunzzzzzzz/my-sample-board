@@ -73,6 +73,35 @@ h1 {
 	font-weight: bold;
 }
 
+.export-button {
+	display: inline-block;
+	padding: 12px 25px;
+	margin-top: 20px; /* 기존 홈 버튼과의 간격 조절 */
+	margin-bottom: 20px;
+	background-color: #007bff; /* 파란색 (수정 버튼과 유사) */
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	font-size: 1.1em;
+	font-weight: bold;
+	text-decoration: none;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+	transition: background-color 0.3s ease, transform 0.2s ease, box-shadow
+		0.2s ease;
+}
+
+.export-button:hover {
+	background-color: #0056b3; /* 호버 시 더 진한 파란색 */
+	transform: translateY(-2px);
+	box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.export-button:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
 .home-button {
 	display: inline-block;
 	padding: 12px 25px;
@@ -118,6 +147,8 @@ h1 {
 
 		<div id="deletedPostGrid" class="ag-theme-quartz"></div>
 
+		<button onclick="exportDataAsCsv()" class="export-button">CSV로
+			내보내기</button>
 		<button id="goToHome" class="home-button">홈으로</button>
 	</div>
 
@@ -125,6 +156,8 @@ h1 {
 		src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
 
 	<script>
+		let gridApi;
+
 		// ***** 그리드 정의 *****
         document.addEventListener('DOMContentLoaded', function() {
             const gridDiv = document.querySelector('#deletedPostGrid');
@@ -149,7 +182,7 @@ h1 {
             };
 
             // Ag-Grid 생성
-            const gridApi = agGrid.createGrid(gridDiv, gridOptions);
+            gridApi = agGrid.createGrid(gridDiv, gridOptions);
 
             // API 호출
             fetch('/api/admin/posts/deleted')
@@ -185,6 +218,15 @@ h1 {
                 link.classList.remove('active'); // 다른 링크에 active 속성 제거
             }
         });
+        
+        // ***** 그리드 목록을 CSV 파일로 내보내기 *****
+		function exportDataAsCsv() {
+        	if (gridApi) {
+        		gridApi.exportDataAsCsv();
+            } else {
+                alert("그리드 데이터를 내보낼 수 없습니다. 페이지가 완전히 로드되었는지 확인해주세요.");
+            }
+        }
         
         // ***** '홈으로' 버튼을 눌렀을 때 *****
         const goToHomeButton = document.getElementById('goToHome');
