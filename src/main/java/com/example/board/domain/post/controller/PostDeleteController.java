@@ -23,7 +23,7 @@ public class PostDeleteController {
 	 * @param postId  삭제할 게시글의 고유 ID (경로 변수 {@code /{postId}}에서 추출).
 	 * @return        처리 결과에 따른 HTTP 응답 (성공 시 200 OK)
 	 */
-	@DeleteMapping("/posts/{postId}")
+	@DeleteMapping("/api/posts/{postId}")
 	ResponseEntity<SuccessResponse> delete(@PathVariable long postId) {
 		postDeleteService.delete(postId);
 		SuccessResponse successResponse = SuccessResponse.of(SUCCESS_MESSAGE, null);

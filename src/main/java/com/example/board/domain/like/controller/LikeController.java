@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 public class LikeController {
 	private final LikeService likeService;
 
-	@PostMapping("/posts/{postId}/like")
+	@PostMapping("/api/posts/{postId}/like")
 	public ResponseEntity<SuccessResponse> like(@PathVariable long postId) {
 		UUID userId = UUID.fromString("3fd80784-3454-4ac1-bf71-82e247e13eb2"); // TODO : 추후 구현
 		likeService.like(postId, userId);
@@ -28,7 +28,7 @@ public class LikeController {
 		return ResponseEntity.ok().body(response);
 	}
 
-	@DeleteMapping("/posts/{postId}/like")
+	@DeleteMapping("/api/posts/{postId}/like")
 	public ResponseEntity<SuccessResponse> cancelLike(@PathVariable long postId) {
 		UUID userId = UUID.fromString("3fd80784-3454-4ac1-bf71-82e247e13eb2"); // TODO : 추후 구현
 		likeService.cancelLike(postId, userId);
@@ -37,7 +37,7 @@ public class LikeController {
 		return ResponseEntity.ok().body(response);
 	}
 
-	@GetMapping("/posts/{postId}/like/check")
+	@GetMapping("/api/posts/{postId}/like/check")
 	public ResponseEntity<SuccessResponse> checkHasLike(@PathVariable long postId) {
 		UUID userId = UUID.fromString("3fd80784-3454-4ac1-bf71-82e247e13eb2"); // TODO : 추후 구현
 		boolean hasLike = likeService.hasLike(postId, userId);

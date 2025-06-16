@@ -28,7 +28,7 @@ public class PostListController {
 	 * @param sort    정렬 조건 (기본값 LATEST)
 	 * @return        게시글 목록 뷰 이름 ("posts.jsp")
 	 */
-	@GetMapping({ "/", "/posts" })
+	@GetMapping({ "/", "/api/posts" })
 	String getAll(Model model, @RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false) String keyword,
 			@RequestParam(required = false, defaultValue = "LATEST") String sort) {

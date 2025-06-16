@@ -9,28 +9,33 @@
 <title>게시글 목록</title>
 <link rel="stylesheet" href="/css/posts.css">
 </head>
+<link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
 <body>
 	<!-- 제목 -->
 	<h1 class="page-title">
-		<a href="/posts" class="logo-link">게시글 목록</a>
+		<a href="/api/posts" class="logo-link">게시글 목록</a>
 	</h1>
 
 	<div class="container">
 		<!-- 검색창 -->
 		<div class="search-container">
-			<input type="text" id="searchKeyword" class="search-input" placeholder="검색..."
+			<input type="text" id="searchKeyword" class="search-input"
+				placeholder="검색..."
 				value="${param.keyword != null ? fn:escapeXml(param.keyword) : ''}">
-			<button type="button" class="search-button" onclick="applySortAndSearch()">검색</button>
+			<button type="button" class="search-button"
+				onclick="applySortAndSearch()">검색</button>
 		</div>
 
 		<!-- 정렬 박스 -->
 		<div class="sort-container">
-			<label for="sort">정렬:</label> 
-			<select id="sort" onchange="applySortAndSearch()">
+			<label for="sort">정렬:</label> <select id="sort"
+				onchange="applySortAndSearch()">
 				<option value="LATEST" ${param.sort == 'LATEST' ? 'selected' : ''}>최신순</option>
 				<option value="OLDEST" ${param.sort == 'OLDEST' ? 'selected' : ''}>오래된순</option>
-				<option value="MOST_VIEWED" ${param.sort == 'MOST_VIEWED' ? 'selected' : ''}>조회수순</option>
-				<option value="MOST_LIKED" ${param.sort == 'MOST_LIKED' ? 'selected' : ''}>좋아요순</option>
+				<option value="MOST_VIEWED"
+					${param.sort == 'MOST_VIEWED' ? 'selected' : ''}>조회수순</option>
+				<option value="MOST_LIKED"
+					${param.sort == 'MOST_LIKED' ? 'selected' : ''}>좋아요순</option>
 			</select>
 		</div>
 
@@ -64,7 +69,7 @@
 									<span class="deleted-post-title">${post.title}</span>
 								</c:when>
 								<c:otherwise>
-									<a href="/posts/${post.postId}" class="post-title-link">${post.title}</a>
+									<a href="/api/posts/${post.postId}" class="post-title-link">${post.title}</a>
 								</c:otherwise>
 							</c:choose></td>
 						<td>${post.author}</td>
@@ -86,35 +91,36 @@
 		<div class="pagination">
 			<c:if test="${currentPage > 1}">
 				<a
-					href="/posts?page=${currentPage - 1}&keyword=${param.keyword}&sort=${param.sort}">이전</a>
+					href="/api/posts?page=${currentPage - 1}&keyword=${param.keyword}&sort=${param.sort}">이전</a>
 			</c:if>
 			<a
-				href="/posts?page=${currentPage}&keyword=${param.keyword}&sort=${param.sort}"
+				href="/api/posts?page=${currentPage}&keyword=${param.keyword}&sort=${param.sort}"
 				class="active">${currentPage}</a>
 			<c:if test="${currentPage < totalPages}">
 				<a
-					href="/posts?page=${currentPage + 1}&keyword=${param.keyword}&sort=${param.sort}">다음</a>
+					href="/api/posts?page=${currentPage + 1}&keyword=${param.keyword}&sort=${param.sort}">다음</a>
 			</c:if>
 		</div>
 
 		<!-- 등록하기 버튼 -->
 		<div class="button-container">
-			<a href="/posts/register" class="register-button">등록하기</a>
+			<a href="/posts/register" class="register-button"
+				onclick='handleRegisterButton(event);'>등록하기</a>
 		</div>
 	</div>
 
 	<script>
-		// '검색' 버튼을 눌렀을 때 발생하는 이벤트
+		// ***** 검색 버튼을 눌렀을 때 *****
 		function applySortAndSearch() {
 			const keyword = document.getElementById('searchKeyword').value;
 			const sort = document.getElementById('sort').value;
 			
 			// API 호출
-			const url = '/posts?page=1&keyword=' + keyword + '&sort=' + sort;
+			const url = '/api/posts?page=1&keyword=' + keyword + '&sort=' + sort;
 			window.location.href = url;
 		}
 		
-		// 어드민 페이지로 이동하기 위한 조건
+		// ***** 어드민 페이지로 이동 *****
 		let adminClickCount = 0;
 		let adminClickTimer = null; // 클릭 간격 타이머 ID 저장
 		const TITLE_CLICK_THRESHOLD = 5; // 어드민 페이지로 이동하기 위한 클릭 횟수
@@ -150,6 +156,36 @@
 				});
 			}
 		});
+		
+		// ***** '등록하기' 버튼을 눌렀을 때 *****
+		async function handleRegisterButton(event) {
+			event.preventDefault();
+			
+			try {
+				// 로그인 여부 확인
+				const response = await fetch('/api/auth/check', {
+					method: 'GET',
+					headers: {
+						'Accept': 'application/json'
+					}
+				});
+				
+				// 로그인 여부가 확인된 경우에만 등록 폼으로 이동
+				if (response.ok) {
+					window.location.href = '/posts/register';
+				} else if (response.status === 401) {
+					const result = await response.json();
+					alert(result.message);
+					
+					setTimeout(() => {
+						window.location.href = '/login';
+					}, 1500);
+				}
+					
+			} catch (error) {
+				alert("네트워크 오류가 발생했습니다.");
+			}
+        }
 	</script>
 </body>
 </html>

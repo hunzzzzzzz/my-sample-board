@@ -30,4 +30,10 @@ spring:
 file:
   upload:
     dir: ${FILE_UPLOAD_DIR:C:/workspace/files/}
+
     
+---
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY:eW91c2h1b2xkZ29hbmRsb3ZleW91cnNlbGZqdXN0aW5iaWViZXI=}

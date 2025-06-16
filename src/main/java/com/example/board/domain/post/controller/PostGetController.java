@@ -63,7 +63,7 @@ public class PostGetController {
 	 * @param response 쿠키를 추가하는 데 사용되는 HttpServletResponse 객체
 	 * @return 게시글 상세 페이지의 뷰 이름 ("post")
 	 */
-	@GetMapping("/posts/{postId}")
+	@GetMapping("/api/posts/{postId}")
 	String get(Model model, @PathVariable long postId, HttpServletRequest request, HttpServletResponse response) {
 		// 쿠키 존재 여부 확인
 		boolean hasCookieOfPostView = hasCookieOfPostView(postId, request);

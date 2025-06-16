@@ -10,6 +10,7 @@
 <title>게시글 상세 보기</title>
 <link rel="stylesheet" href="/css/post.css">
 </head>
+<link rel="icon" href="/icons/favicon.ico" type="image/x-icon">
 <body>
 	<div class="container">
 		<!-- 서버 메시지가 출력될 공간 -->
@@ -109,7 +110,7 @@
 				class="action-button edit-button">수정</a>
 			<button type="button" class="action-button delete-button"
 				onclick="deletePost(${post.postId})">삭제</button>
-			<a href="/posts" class="action-button back-button">목록으로</a>
+			<a href="/api/posts" class="action-button back-button">목록으로</a>
 		</div>
 	</div>
 
@@ -127,7 +128,7 @@
 
         async function checkInitialLikeStatus() {
             try {
-                const response = await fetch('/posts/' + currentPostId + '/like/check');
+                const response = await fetch('/api/posts/' + currentPostId + '/like/check');
                 const result = await response.json();
 
                 if (response.ok) {
@@ -156,7 +157,7 @@
         // 좋아요 버튼을 클릭했을 때
         likeButton.addEventListener('click', async () => {
             try {
-                let url = '/posts/' + currentPostId + '/like'; // URL
+                let url = '/api/posts/' + currentPostId + '/like'; // URL
                 let method; // HTTP Method
 
 				// HTTP Method 세팅
@@ -221,7 +222,7 @@
             if (confirm('정말로 이 게시글을 삭제하시겠습니까?')) {
                 try {
                 	// API 요청
-                    const response = await fetch('/posts/' + postId, {
+                    const response = await fetch('/api/posts/' + postId, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
@@ -234,8 +235,14 @@
                     if (response.ok) {
                         displayDynamicMessage(result.message, 'success');
                         setTimeout(() => {
-                            window.location.href = '/posts';
+                            window.location.href = '/api/posts';
                         }, 1500); // 1.5초 후 메인 페에지로 이동
+                    } else {
+                    	// 접근 권한이 없는 경우
+                        displayDynamicMessage(result.message, 'error');
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 1500); // 1.5초 후 로그인 페이지로 이동
                     }
                 } catch (error) {
                     console.error('삭제 실패:', error);
